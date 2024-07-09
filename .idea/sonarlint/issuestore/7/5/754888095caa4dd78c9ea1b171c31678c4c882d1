@@ -1,0 +1,17 @@
+
+g	java:S112/"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8œé†‘‰2
+’
+java:S2095 "JUse try-with-resources or close this "ServerSocket" in a "finally" clause.(íîÁ¿ùÿÿÿÿ8¤Ó†‘‰2J$8014eb26-8a98-44bc-8d1c-a2118bd36c99
+j
+java:S21893""Add an end condition to this loop.(˜ïˆžÿÿÿÿÿ8¥Ó†‘‰2J$7f90c9d5-6028-4b5a-81d8-07950feaa5ee
+l	java:S106!"+Replace this use of System.out by a logger.(Š¦‚8³Ó†‘‰2J$ad21fb3f-fb00-41b4-b270-4201a8857ffa
+t
+java:S3599%",Use another way to initialize this instance.(ôï¤Ñøÿÿÿÿ8´Ó†‘‰2J$816dabb0-a3b4-4646-ab00-74367c7a507b
+¡
+java:S1171%"YMove the contents of this initializer to a standard constructor or to field initializers.(ôï¤Ñøÿÿÿÿ8µÓ†‘‰2J$74de259e-7f15-433b-9bc2-130d0e455eaf
+r	java:S1066"+Replace this use of System.out by a logger.(³§ËÎÿÿÿÿÿ8µÓ†‘‰2J$48c8933a-4517-49e3-bf84-d2a023d40a18
+r	java:S106?"+Replace this use of System.out by a logger.(…ú¼Ûûÿÿÿÿ8¶Ó†‘‰2J$d593ec63-9d4a-495a-8eed-00ccd7fdde2c
+x
+java:S1128"0Remove this unused import 'java.time.LocalDate'.(›‘¬èýÿÿÿÿ8¸Ó†‘‰2J$367e9387-7015-487f-82fb-17de1e576362
+|
+java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8¸Ó†‘‰2J$37ec05d5-f8c1-45e9-837a-785b9267cb0c

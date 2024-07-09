@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Real-Time Number Display</title>
+    <style>
+        #dis {
+            width: 900px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #display {
+            width: 450px;
+            font-size: 2em;
+            text-align: center;
+            margin-top: 20%;
+        }
+
+        #display1 {
+            width: 450px;
+            font-size: 2em;
+            text-align: center;
+            margin-top: 20%;
+        }
+
+        #display2 {
+            width: 450px;
+            font-size: 2em;
+            text-align: center;
+            margin-top: 20%;
+        }
+
+        #display3 {
+            width: 450px;
+            font-size: 2em;
+            text-align: center;
+            margin-top: 20%;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- 显示数字的区域 -->
+<div id="dis">
+    <div id="display">Loading...</div>
+    <div id="display1">Loading...</div>
+    <div id="display2">Loading...</div>
+    <div id="display3">Loading...</div>
+</div>
+
+<script>
+    function createWebSocketConnection(clientId, displayElement) {
+        const wsUrl = `ws://localhost:8080/ws?clientId=${clientId}`;
+        const socket = new WebSocket(wsUrl);
+
+        socket.onopen = function (event) {
+            displayElement.textContent = 'Connected!';
+        };
+
+        socket.onmessage = function (event) {
+            console.log(`${clientId}:`, event.data);
+            displayElement.textContent = event.data;
+        };
+
+        socket.onerror = function (error) {
+            console.error('WebSocket error:', error);
+            displayElement.textContent = 'Error!';
+        };
+
+        socket.onclose = function (event) {
+            displayElement.textContent = 'Disconnected!';
+        };
+    }
+
+    const displays = ['display', 'display1', 'display2', 'display3'];
+    const list = [123, 456, 678, 111]
+    list.forEach((clientId, index) => {
+        console.log(clientId + ":" + displays[index])
+        const displayElement = document.getElementById(displays[index]);
+        createWebSocketConnection(clientId, displayElement);
+    });
+
+</script>
+
+</body>
+</html>
