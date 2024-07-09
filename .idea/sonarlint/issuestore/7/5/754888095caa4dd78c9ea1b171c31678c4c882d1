@@ -1,17 +1,27 @@
 
-g	java:S112/"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8œé†‘‰2
 ’
-java:S2095 "JUse try-with-resources or close this "ServerSocket" in a "finally" clause.(íîÁ¿ùÿÿÿÿ8¤Ó†‘‰2J$8014eb26-8a98-44bc-8d1c-a2118bd36c99
+java:S2095N"JUse try-with-resources or close this "ServerSocket" in a "finally" clause.(íîÁ¿ùÿÿÿÿ8ÎÎ¸‰2J$32448665-2507-4c6e-9712-bae534437bb1
 j
-java:S21893""Add an end condition to this loop.(˜ïˆÿÿÿÿÿ8¥Ó†‘‰2J$7f90c9d5-6028-4b5a-81d8-07950feaa5ee
-l	java:S106!"+Replace this use of System.out by a logger.(Š¦‚8³Ó†‘‰2J$ad21fb3f-fb00-41b4-b270-4201a8857ffa
-t
-java:S3599%",Use another way to initialize this instance.(ôï¤Ñøÿÿÿÿ8´Ó†‘‰2J$816dabb0-a3b4-4646-ab00-74367c7a507b
-¡
-java:S1171%"YMove the contents of this initializer to a standard constructor or to field initializers.(ôï¤Ñøÿÿÿÿ8µÓ†‘‰2J$74de259e-7f15-433b-9bc2-130d0e455eaf
-r	java:S1066"+Replace this use of System.out by a logger.(³§ËÎÿÿÿÿÿ8µÓ†‘‰2J$48c8933a-4517-49e3-bf84-d2a023d40a18
-r	java:S106?"+Replace this use of System.out by a logger.(…ú¼Ûûÿÿÿÿ8¶Ó†‘‰2J$d593ec63-9d4a-495a-8eed-00ccd7fdde2c
-x
-java:S1128"0Remove this unused import 'java.time.LocalDate'.(›‘¬èıÿÿÿÿ8¸Ó†‘‰2J$367e9387-7015-487f-82fb-17de1e576362
+java:S2189e""Add an end condition to this loop.(˜ïˆÿÿÿÿÿ8‚ÎÎ¸‰2J$3ea9e915-73d6-46d9-8119-ebba546d6abd
+l	java:S106G"+Replace this use of System.out by a logger.(öÈÀ8ÎÎ¸‰2J$d6268809-250a-4ca9-b7a7-f22d1d88157e
+m	java:S106I"+Replace this use of System.out by a logger.(×Ì²„8ÎÎ¸‰2J$38c50bd0-b7c2-4b08-9a22-bbe5f0252e93
+l	java:S106O"+Replace this use of System.out by a logger.(Š¦‚8ÎÎ¸‰2J$19a0f948-ad36-4c79-89d6-cf34aef2f28c
+n
+java:S1602S",Remove useless curly braces around statement(›¨8‘ÎÎ¸‰2J$8cef0283-e02e-4845-93c5-99908399a1be
+ƒ	java:S125T"<This block of commented-out lines of code should be removed.(Ğ‰–ºıÿÿÿÿ8’ÎÎ¸‰2J$83ee890f-3498-4c6d-80ce-ca983a86d10a
+r	java:S106`"+Replace this use of System.out by a logger.(³§ËÎÿÿÿÿÿ8’ÎÎ¸‰2J$8b334c15-1889-4772-adea-41dbdc57646d
+r	java:S106j"+Replace this use of System.out by a logger.(…ú¼Ûûÿÿÿÿ8’ÎÎ¸‰2J$f8e051b4-4f61-406b-805a-5b7b8ca296c0
+—
+java:S1128"ORemove this unused import 'com.fasterxml.jackson.core.JsonProcessingException'.(ßÔïÇûÿÿÿÿ8“ÎÎ¸‰2J$f3a7ea0c-a737-41cc-b102-019fee257d3f
 |
-java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8¸Ó†‘‰2J$37ec05d5-f8c1-45e9-837a-785b9267cb0c
+java:S1128	":Remove this unused import 'java.io.ByteArrayOutputStream'.(Î‡È8“ÎÎ¸‰2J$a9abd594-a4b8-4665-975e-a85ae27b558e
+x
+java:S1128"0Remove this unused import 'java.nio.ByteBuffer'.(¿¢×±úÿÿÿÿ8“ÎÎ¸‰2J$75c75d0b-7391-475d-a3f1-67f71a243295
+
+java:S1128">Remove this unused import 'java.nio.charset.StandardCharsets'.(ï˜ŞÛ8“ÎÎ¸‰2J$9819ee0b-2bee-4066-8270-0ee3ff6b752f
+‰
+java:S1128"ARemove this unused import 'org.apache.coyote.http11.Constants.a'.(ÿãÈ£ûÿÿÿÿ8“ÎÎ¸‰2J$8f41ce93-d2e7-4809-ab0d-8fbaaebca4a3
+m
+java:S1068 "*Remove this unused "random" private field.(Œä¬ú8”ÎÎ¸‰2J$c3630d86-88b0-4642-b63f-1a79b297b055
+s
+java:S1068!"0Remove this unused "objectMapper" private field.(œ‡¨ 8”ÎÎ¸‰2J$52244522-0521-40ad-983a-e644f5d46c6b

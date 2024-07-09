@@ -1,6 +1,7 @@
 package com.mini.netty.websocket.handler;
 
-import com.mini.netty.websocket.config.NettyConfig;
+import com.mini.netty.client.handler.NettyTcpClientHandler;
+import com.mini.netty.utils.WebSocketHolder;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -11,11 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static com.mini.netty.constant.WebSocketConstant.WEB_SOCKET_CLIENT_ID;
-import static com.mini.netty.constant.WebSocketConstant.WEB_SOCKET_LINK;
-import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
+import static com.mini.common.constant.NettyServerConstant.WEB_SOCKET_CLIENT_ID;
+import static com.mini.common.constant.NettyServerConstant.WEB_SOCKET_LINK;
+
 
 @Slf4j
 @Component
@@ -29,7 +29,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
             // 重置地址
             request.setUri(WEB_SOCKET_LINK);
             // 获取用户ID,关联channel
-            NettyConfig.getUserChannelMap().put(clientId, ctx.channel());
+            WebSocketHolder.getUserChannelMap().put(clientId, ctx.channel());
             // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
             AttributeKey<String> key = AttributeKey.valueOf(WEB_SOCKET_CLIENT_ID);
             ctx.channel().attr(key).setIfAbsent(clientId);
@@ -41,7 +41,10 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
-        log.info("服务器收到消息：{}", msg.text());
+        // 模拟发送消息
+        NettyTcpClientHandler.sendToTcpServer(msg.text());
+        log.info("websocket服务器收到消息：{}", msg.text());
+        // TODO: 收到指令，向TCP服务端发送报文
     }
 
     /**
@@ -51,13 +54,13 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
     public void handlerAdded(ChannelHandlerContext ctx) {
         log.info("handlerAdded 被调用" + ctx.channel().id().asLongText());
         // 添加到channelGroup 通道组
-        NettyConfig.getChannelGroup().add(ctx.channel());
+        WebSocketHolder.getChannelGroup().add(ctx.channel());
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
         log.info("handlerRemoved 被调用" + ctx.channel().id().asLongText());
-        NettyConfig.getChannelGroup().remove(ctx.channel());
+        WebSocketHolder.getChannelGroup().remove(ctx.channel());
         removeClientId(ctx);
     }
 
@@ -65,7 +68,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         log.error("异常：{}", cause.getMessage());
         // 删除通道
-        NettyConfig.getChannelGroup().remove(ctx.channel());
+        WebSocketHolder.getChannelGroup().remove(ctx.channel());
         removeClientId(ctx);
         ctx.close();
     }
@@ -76,7 +79,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
     private void removeClientId(ChannelHandlerContext ctx) {
         AttributeKey<String> key = AttributeKey.valueOf(WEB_SOCKET_CLIENT_ID);
         String userId = ctx.channel().attr(key).get();
-        NettyConfig.getUserChannelMap().remove(userId);
+        WebSocketHolder.getUserChannelMap().remove(userId);
     }
 
     /**
@@ -103,9 +106,8 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
      * 根据注册clientId单发
      */
     public static void sendToWebSocket(String clientId, String data) {
-        Channel channel = NettyConfig.getUserChannelMap().get(clientId);
+        Channel channel = WebSocketHolder.getUserChannelMap().get(clientId);
         if (Objects.nonNull(channel)) {
-            log.info("发送消息给客户端：{}：{}", clientId, data);
             channel.writeAndFlush(new TextWebSocketFrame(data));
         }
     }

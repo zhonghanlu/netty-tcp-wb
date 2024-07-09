@@ -1,4 +1,4 @@
-package com.mini.netty.websocket.config;
+package com.mini.netty.utils;
 
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * netty配置信息
  */
-public class NettyConfig {
+public class WebSocketHolder {
 
     /**
      * 定义一个channel组，管理所有的channel
@@ -24,7 +24,7 @@ public class NettyConfig {
      */
     private static ConcurrentHashMap<String, Channel> CLIENTS_MAP = new ConcurrentHashMap<>();
 
-    private NettyConfig() {
+    private WebSocketHolder() {
     }
 
     /**

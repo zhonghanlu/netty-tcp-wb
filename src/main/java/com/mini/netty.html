@@ -57,6 +57,7 @@
 
         socket.onopen = function (event) {
             displayElement.textContent = 'Connected!';
+            socket.send(`${clientId}`);
         };
 
         socket.onmessage = function (event) {

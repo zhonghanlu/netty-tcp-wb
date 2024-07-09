@@ -1,12 +1,12 @@
-package com.mini.netty.constant;
+package com.mini.common.constant;
 
 /**
  * @author zhl
  * @create 2024/7/8 18:52
  */
-public class WebSocketConstant {
+public class NettyServerConstant {
 
-    public WebSocketConstant() {
+    public NettyServerConstant() {
     }
 
     /**
@@ -22,5 +22,6 @@ public class WebSocketConstant {
     /**
      * webSocket协议名
      */
-    private static final String WEBSOCKET_PROTOCOL = "WebSocket";
+    public static final String WEBSOCKET_PROTOCOL = "WebSocket";
+
 }
