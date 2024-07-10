@@ -164,19 +164,22 @@ public class SimpleTCPServer {
 
 
     private static void pushMessageToAll(byte[] message) {
-        for (Socket client : connectedClients) {
-            try {
-                OutputStream out = client.getOutputStream();
-                out.write(message);
-                out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-                // 如果发生异常，移除该客户端
-                connectedClients.remove(client);
+
+        if (Objects.nonNull(message)) {
+            for (Socket client : connectedClients) {
                 try {
-                    client.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                    OutputStream out = client.getOutputStream();
+                    out.write(message);
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // 如果发生异常，移除该客户端
+                    connectedClients.remove(client);
+                    try {
+                        client.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }

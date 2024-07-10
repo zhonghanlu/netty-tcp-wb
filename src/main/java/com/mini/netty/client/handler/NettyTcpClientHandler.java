@@ -18,7 +18,7 @@ public class NettyTcpClientHandler extends SimpleChannelInboundHandler<Message> 
         super.channelActive(ctx);
         // 当通道激活时，可以发送初始化消息
         TcpSocketHolder.add(ctx.channel());
-        log.info("连接成功");
+        log.info("连接TCP服务端成功");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class NettyTcpClientHandler extends SimpleChannelInboundHandler<Message> 
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-        log.info("handlerRemoved 被调用" + ctx.channel().id().asLongText());
+//        log.info("handlerRemoved 被调用" + ctx.channel().id().asLongText());
         TcpSocketHolder.del();
     }
 

@@ -37,6 +37,18 @@ public class OptimizedNettyTcpClient implements ApplicationRunner {
 
     private Channel channel;
 
+    /**
+     * 断线重连并且发布一个监听事件
+     */
+    private final AtomicBoolean connecting = new AtomicBoolean(false);
+
+    private final DefaultEventExecutor executor = new DefaultEventExecutor(group);
+
+    /**
+     * 标志位，用于记录监听器是否已经添加
+     */
+    private boolean closeFutureListenerAdded = false;
+
     public OptimizedNettyTcpClient() {
         log.info("OptimizedNettyTcpClient instance created.");
         bootstrap.group(group)
@@ -63,22 +75,24 @@ public class OptimizedNettyTcpClient implements ApplicationRunner {
         doConnect();
     }
 
-    /**
-     * 断线重连并且发布一个监听事件
-     */
-    private final AtomicBoolean connecting = new AtomicBoolean(false);
-
-    private final DefaultEventExecutor executor = new DefaultEventExecutor(group);
-
-    private boolean closeFutureListenerAdded = false; // 标志位，用于记录监听器是否已经添加
-
     private void addCloseFutureListenerIfNecessary() {
-        if (channel != null && channel.isActive() && !closeFutureListenerAdded) {
-            channel.closeFuture().addListener((ChannelFutureListener) f -> {
-                log.error("Connection lost. Attempting to reconnect.");
-                executor.schedule(this::doConnect, 3, TimeUnit.SECONDS);
-            });
-            closeFutureListenerAdded = true;
+        if (channel != null && channel.isActive()) {
+            if (!closeFutureListenerAdded) {
+                channel.closeFuture().addListener((ChannelFutureListener) f -> {
+                    log.error("Connection lost. Attempting to reconnect. Retrying in 3 seconds.");
+                    executor.schedule(this::doConnect, 3, TimeUnit.SECONDS);
+                });
+                // 标志位设置为true，表示已经添加过监听器
+                closeFutureListenerAdded = true;
+            } else {
+                // 移除旧的监听器，然后重新添加，确保监听器总是针对当前的channel
+                channel.closeFuture().removeListener((ChannelFutureListener) f -> {
+                });
+                channel.closeFuture().addListener((ChannelFutureListener) f -> {
+                    log.error("Connection lost. Attempting to reconnect. Retrying in 3 seconds.");
+                    executor.schedule(this::doConnect, 3, TimeUnit.SECONDS);
+                });
+            }
         }
     }
 

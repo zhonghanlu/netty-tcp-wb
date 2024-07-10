@@ -1,6 +1,5 @@
 package com.mini.netty.websocket.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mini.codec.proto.Message;
 import com.mini.netty.client.handler.NettyTcpClientHandler;
 import com.mini.netty.utils.WebSocketHolder;
@@ -52,14 +51,14 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
      */
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
-        log.info("handlerAdded 被调用" + ctx.channel().id().asLongText());
+//        log.info("handlerAdded 被调用" + ctx.channel().id().asLongText());
         // 添加到channelGroup 通道组
         WebSocketHolder.getChannelGroup().add(ctx.channel());
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-        log.info("handlerRemoved 被调用" + ctx.channel().id().asLongText());
+//        log.info("handlerRemoved 被调用" + ctx.channel().id().asLongText());
         WebSocketHolder.getChannelGroup().remove(ctx.channel());
         removeClientId(ctx);
     }
