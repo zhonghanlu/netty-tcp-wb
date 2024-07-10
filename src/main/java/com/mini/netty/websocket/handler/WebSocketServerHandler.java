@@ -1,17 +1,17 @@
 package com.mini.netty.websocket.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mini.codec.proto.Message;
 import com.mini.netty.client.handler.NettyTcpClientHandler;
 import com.mini.netty.utils.WebSocketHolder;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Objects;
 
 import static com.mini.common.constant.NettyServerConstant.WEB_SOCKET_CLIENT_ID;
 import static com.mini.common.constant.NettyServerConstant.WEB_SOCKET_LINK;
@@ -19,7 +19,7 @@ import static com.mini.common.constant.NettyServerConstant.WEB_SOCKET_LINK;
 
 @Slf4j
 @Component
-public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message> {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -40,11 +40,11 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
-        // 模拟发送消息
-        NettyTcpClientHandler.sendToTcpServer(msg.text());
-        log.info("websocket服务器收到消息：{}", msg.text());
-        // TODO: 收到指令，向TCP服务端发送报文
+    protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
+        // 发送给TCP服务端，根据指令区分操作类型，
+        // 1.开关暂停指令 TODO：定制化操作硬件
+        NettyTcpClientHandler.sendToTcpServer(msg);
+//        log.info("websocket服务器收到消息：{}", msg);
     }
 
     /**
@@ -104,11 +104,18 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
 
     /**
      * 根据注册clientId单发
+     * 通过解码器，将message信息转换为TextWebSocketFrame JSON
      */
-    public static void sendToWebSocket(String clientId, String data) {
+    public static void sendToWebSocket(String clientId, Message message) {
         Channel channel = WebSocketHolder.getUserChannelMap().get(clientId);
         if (Objects.nonNull(channel)) {
-            channel.writeAndFlush(new TextWebSocketFrame(data));
+            ChannelFuture future = channel.writeAndFlush(message);
+
+            future.addListener((ChannelFutureListener) future1 -> {
+                if (!future1.isSuccess()) {
+                    log.error("websocket消息发送失败:{}", future1.cause().getMessage());
+                }
+            });
         }
     }
 

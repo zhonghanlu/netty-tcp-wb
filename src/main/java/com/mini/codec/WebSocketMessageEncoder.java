@@ -1,40 +1,31 @@
-//package com.mini.codec;
-//
-//
-//import com.alibaba.fastjson.JSONObject;
-//import com.lld.im.codec.proto.MessagePack;
-//import io.netty.buffer.ByteBuf;
-//import io.netty.buffer.Unpooled;
-//import io.netty.channel.ChannelHandlerContext;
-//import io.netty.handler.codec.MessageToMessageEncoder;
-//import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//
-//import java.util.List;
-//
-///**
-// * @author: Chackylee
-// * @description:
-// **/
-//public class WebSocketMessageEncoder extends MessageToMessageEncoder<MessagePack> {
-//
-//    private static Logger log = LoggerFactory.getLogger(WebSocketMessageEncoder.class);
-//
-//    @Override
-//    protected void encode(ChannelHandlerContext ctx, MessagePack msg, List<Object> out)  {
-//
-//        try {
-//            String s = JSONObject.toJSONString(msg);
-//            ByteBuf byteBuf = Unpooled.directBuffer(8+s.length());
-//            byte[] bytes = s.getBytes();
-//            byteBuf.writeInt(msg.getCommand());
-//            byteBuf.writeInt(bytes.length);
-//            byteBuf.writeBytes(bytes);
-//            out.add(new BinaryWebSocketFrame(byteBuf));
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//    }
-//}
+package com.mini.codec;
+
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mini.codec.proto.Message;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageEncoder;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
+/**
+ * @author: zhl
+ * @description: 发送给前端的websocket客户端
+ **/
+public class WebSocketMessageEncoder extends MessageToMessageEncoder<Message> {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    protected void encode(ChannelHandlerContext channelHandlerContext, Message message, List<Object> out) throws JsonProcessingException {
+        String jsonMessage = objectMapper.writeValueAsString(message);
+        ByteBuf byteBuf = Unpooled.copiedBuffer(jsonMessage.getBytes(StandardCharsets.UTF_8));
+        out.add(new TextWebSocketFrame(byteBuf));
+
+    }
+}

@@ -1,25 +1,18 @@
 package com.mini.tcp;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mini.codec.proto.MessageHeader;
+import com.mini.codec.proto.MessagePack;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static org.apache.coyote.http11.Constants.a;
 
 /**
  * @author zhl
@@ -34,62 +27,95 @@ public class SimpleTCPServer {
 
     private static byte[] bytes = null;
 
-    static {
-        MessageHeader report = new MessageHeader();
-        report.setCommand((byte) 0xAA);
-        report.setHospNo((short) 1);
-        report.setDeviceNo((byte) 1);
-        report.setRunningState((byte) 1);
-        report.setExciteType((byte) 11);
-        report.setElectricity((short) 11);
-        report.setResistance((short) 1);
-        report.setBattery((short) 11);
-        report.setSignal((short) 1);
-        report.setResidueTime((byte) 11);
-        report.setExtra(0);
-        report.setVerify((byte) 11);
+    private static List<byte[]> bytesList = new ArrayList<>();
 
-        // 将DeviceReport对象转换为字节数组
-        ByteBuf byteBuf = Unpooled.buffer(20);
-        byteBuf.writeByte(report.getCommand());
-        byteBuf.writeShort(report.getHospNo());
-        byteBuf.writeByte(report.getDeviceNo());
-        byteBuf.writeByte(report.getRunningState());
-        byteBuf.writeByte(report.getExciteType());
-        byteBuf.writeShort(report.getElectricity());
-        byteBuf.writeShort(report.getResistance());
-        byteBuf.writeShort(report.getBattery());
-        byteBuf.writeShort(report.getSignal());
-        byteBuf.writeByte(report.getResidueTime());
-        byteBuf.writeInt(report.getExtra());
-        byteBuf.writeByte(report.getVerify());
-
-        // 打印生成的字节数组
-        bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(bytes);
-        for (byte b : bytes) {
-            System.out.printf("%02X ", b);
-        }
-        System.out.println(bytes.length);
-    }
+//    private static void genderData() {
+//
+//        bytesList.add(bytes);
+//
+//        MessageHeader report1 = new MessageHeader();
+//        report1.setCommand((byte) 0xAA);
+//        report1.setHospNo((short) 1);
+//        report1.setDeviceNo((byte) 123);
+//        report1.setRunningState((byte) 1);
+//        report1.setExciteType((byte) 11);
+//        report1.setElectricity((short) random.nextInt(9));
+//        report1.setResistance((short) 1);
+//        report1.setBattery((short) 11);
+//        report1.setSignal((short) 1);
+//        report1.setResidueTime((byte) 11);
+//        report1.setExtra(0);
+//        report1.setVerify((byte) 11);
+//
+//        // 将DeviceReport对象转换为字节数组
+//        ByteBuf byteBuf1 = Unpooled.buffer(20);
+//        byteBuf1.writeByte(report.getCommand());
+//        byteBuf1.writeShort(report.getHospNo());
+//        byteBuf1.writeByte(report.getDeviceNo());
+//        byteBuf1.writeByte(report.getRunningState());
+//        byteBuf1.writeByte(report.getExciteType());
+//        byteBuf1.writeShort(report.getElectricity());
+//        byteBuf1.writeShort(report.getResistance());
+//        byteBuf1.writeShort(report.getBattery());
+//        byteBuf1.writeShort(report.getSignal());
+//        byteBuf1.writeByte(report.getResidueTime());
+//        byteBuf1.writeInt(report.getExtra());
+//        byteBuf1.writeByte(report.getVerify());
+//
+//        // 打印生成的字节数组
+//        byte[] bytes1 = new byte[byteBuf1.readableBytes()];
+//        byteBuf1.readBytes(bytes1);
+//        bytesList.add(bytes1);
+//    }
 
     public static void main(String[] args) throws IOException {
         int port = 18888; // 选择一个端口号
         ServerSocket serverSocket = new ServerSocket(port);
         System.out.println("TCP模拟服务器启动，正在监听端口: " + port);
 
+        int[] clients = {111, 112, 113, 114};
 
         // 启动定时任务，每5秒发送一次消息
         scheduler.scheduleAtFixedRate(() -> {
-//            Map<String, Integer> map = new HashMap<String, Integer>() {{
-//                put("123", random.nextInt(99999) + 1);
-//                put("456", random.nextInt(99999) + 1);
-//                put("678", random.nextInt(99999) + 1);
-//                put("111", random.nextInt(99999) + 1);
-//            }};
-//            bytes
-            pushMessageToAll("1111");
-        }, 0, 5, TimeUnit.SECONDS);
+            for (int client : clients) {
+                MessageHeader report = new MessageHeader();
+                report.setCommand((byte) 0xAA);
+                report.setHospNo((short) 1);
+
+                report.setDeviceNo((byte) client);
+
+                report.setRunningState((byte) 1);
+                report.setExciteType((byte) 11);
+                report.setElectricity((short) (random.nextInt(9) + 1));
+                report.setResistance((short) 1);
+                report.setBattery((short) 11);
+                report.setSignal((short) 1);
+                report.setResidueTime((byte) 11);
+                report.setExtra(0);
+                report.setVerify((byte) 11);
+
+                // 将DeviceReport对象转换为字节数组
+                ByteBuf byteBuf = Unpooled.buffer(20);
+                byteBuf.writeByte(report.getCommand());
+                byteBuf.writeShort(report.getHospNo());
+                byteBuf.writeByte(report.getDeviceNo());
+                byteBuf.writeByte(report.getRunningState());
+                byteBuf.writeByte(report.getExciteType());
+                byteBuf.writeShort(report.getElectricity());
+                byteBuf.writeShort(report.getResistance());
+                byteBuf.writeShort(report.getBattery());
+                byteBuf.writeShort(report.getSignal());
+                byteBuf.writeByte(report.getResidueTime());
+                byteBuf.writeInt(report.getExtra());
+                byteBuf.writeByte(report.getVerify());
+
+                // 打印生成的字节数组
+                byte[] bytes = new byte[byteBuf.readableBytes()];
+                byteBuf.readBytes(bytes);
+
+                pushMessageToAll(bytes);
+            }
+        }, 0, 1, TimeUnit.SECONDS);
 
         // 监听并接受连接
         Socket clientSocket = serverSocket.accept();
@@ -99,19 +125,49 @@ public class SimpleTCPServer {
         connectedClients.add(clientSocket);
 
         while (true) {
-            DataInputStream in = new DataInputStream(connectedClients.get(0).getInputStream());
-            byte[] buffer = new byte[1024]; // 假设消息长度不超过1024字节
-            int readBytes = in.read(buffer);
-            String str = new String(buffer, 0, readBytes);
-            System.out.println("TCP模拟服务器收到信息: " + str);
+            InputStream input = connectedClients.get(0).getInputStream();
+
+            byte[] buffer = new byte[1024]; // 缓冲区大小
+            int bytesRead;
+
+            while ((bytesRead = input.read(buffer)) != -1) { // 读取客户端数据
+                byte[] data = Arrays.copyOfRange(buffer, 0, bytesRead); // 复制实际读取的字节数
+                System.out.println("Received bytes: " + data.length);
+                System.out.println("Received data:" + data);
+
+                MessagePack messagePack = parseMessagePack(data);
+                System.out.println("TCP模拟服务器收到信息: " + messagePack);
+            }
         }
     }
 
-    private static void pushMessageToAll(String message) {
+    private static MessagePack parseMessagePack(byte[] bytes) {
+        MessagePack messagePack = new MessagePack();
+        DataInputStream dataIn = new DataInputStream(new ByteArrayInputStream(bytes));
+
+        try {
+            messagePack.setCommand(dataIn.readByte());
+            messagePack.setDeviceNo(dataIn.readByte());
+            messagePack.setRunCommand(dataIn.readByte());
+            messagePack.setExciteType(dataIn.readByte());
+            messagePack.setElectricityOut(dataIn.readShort());
+            messagePack.setExtra(new byte[2]);
+            dataIn.readFully(messagePack.getExtra());
+            messagePack.setVerify(dataIn.readByte());
+        } catch (IOException e) {
+            // 处理异常
+            e.printStackTrace();
+        }
+
+        return messagePack;
+    }
+
+
+    private static void pushMessageToAll(byte[] message) {
         for (Socket client : connectedClients) {
             try {
                 OutputStream out = client.getOutputStream();
-                out.write(message.getBytes());
+                out.write(message);
                 out.flush();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -57,12 +57,24 @@
 
         socket.onopen = function (event) {
             displayElement.textContent = 'Connected!';
-            socket.send(`${clientId}`);
+            // socket.send(`${clientId}`);
         };
 
         socket.onmessage = function (event) {
-            console.log(`${clientId}:`, event.data);
-            displayElement.textContent = event.data;
+            dataJson = JSON.parse(event.data);
+            console.log(`${clientId}:`, dataJson.messageHeader.electricity);
+            displayElement.textContent = dataJson.messageHeader.electricity;
+
+            dataJson.messagePack = {
+                command: 170,
+                deviceNo: 111,
+                runCommand: 2,
+                exciteType: 2,
+                electricityOut: 1,
+                extra: 2,
+                verify: 1
+            }
+            socket.send(JSON.stringify(dataJson))
         };
 
         socket.onerror = function (error) {
@@ -76,9 +88,9 @@
     }
 
     const displays = ['display', 'display1', 'display2', 'display3'];
-    const list = [123, 456, 678, 111]
+    const list = [111, 112, 113, 114]
     list.forEach((clientId, index) => {
-        console.log(clientId + ":" + displays[index])
+        // console.log(clientId + ":" + displays[index])
         const displayElement = document.getElementById(displays[index]);
         createWebSocketConnection(clientId, displayElement);
     });

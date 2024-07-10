@@ -1,5 +1,7 @@
 package com.mini.codec.proto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mini.codec.ByteArrayDeserializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -46,6 +48,7 @@ public class MessagePack<T> implements Serializable {
      * 保留字段
      * 13 字节
      */
+    @JsonDeserialize(using = ByteArrayDeserializer.class)
     private byte[] extra; // 使用字节数组来表示13字节的保留字段
 
     /**

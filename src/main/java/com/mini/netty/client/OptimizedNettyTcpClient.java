@@ -1,6 +1,7 @@
 package com.mini.netty.client;
 
 import com.mini.codec.MessageDecoder;
+import com.mini.codec.MessageEncoder;
 import com.mini.netty.client.handler.HeartBeatTcpClientHandler;
 import com.mini.netty.client.handler.NettyTcpClientHandler;
 import io.netty.bootstrap.Bootstrap;
@@ -8,9 +9,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.FixedLengthFrameDecoder;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.mini.common.constant.NettyServerConstant.*;
 
 @Slf4j
 @Component
@@ -48,10 +44,9 @@ public class OptimizedNettyTcpClient implements ApplicationRunner {
                 .handler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-//                        ch.pipeline().addLast(new FixedLengthFrameDecoder(20));
-//                        ch.pipeline().addLast(new MessageDecoder());
-                        ch.pipeline().addLast(new StringDecoder());
-                        ch.pipeline().addLast(new StringEncoder());
+                        ch.pipeline().addLast(new FixedLengthFrameDecoder(20));
+                        ch.pipeline().addLast(new MessageDecoder());
+                        ch.pipeline().addLast(new MessageEncoder());
                         //readerIdleTime：超过xxx时间客户端没有发生读事件，就会触发一个 READER_IDLE 的 IdleStateEvent 事件.
                         //writerIdleTime：超过xxx时间客户端没有发生写事件，就会触发一个 WRITER_IDLE 的 IdleStateEvent 事件.
                         //allIdleTime：超过xxx时间客户端没有发生读或写事件，就会触发一个 ALL_IDLE 的 IdleStateEvent 事件.

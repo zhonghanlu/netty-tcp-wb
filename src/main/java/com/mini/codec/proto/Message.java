@@ -10,7 +10,7 @@ public class Message {
 
     private MessageHeader messageHeader;
 
-    private Object messagePack;
+    private MessagePack messagePack;
 
     @Override
     public String toString() {

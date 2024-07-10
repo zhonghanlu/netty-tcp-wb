@@ -1,8 +1,6 @@
 package com.mini.netty.utils;
 
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.util.concurrent.GlobalEventExecutor;
+import io.netty.channel.Channel;
 
 /**
  * @author zhl
@@ -11,18 +9,30 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 public class TcpSocketHolder {
 
     /**
-     * 定义一个channel组，管理所有的channel
-     * GlobalEventExecutor.INSTANCE 是全局的事件执行器，是一个单例
+     * 定义一个channel
      */
-    private static ChannelGroup CHANNEL_GROUP = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    private static volatile Channel CHANNEL;
+
+
+    /**
+     * 添加channel
+     */
+    public static void add(Channel ctx) {
+        CHANNEL = ctx;
+    }
+
+    /**
+     * 删除channel
+     */
+    public static void del() {
+        CHANNEL = null;
+    }
 
     /**
      * 获取channel组
-     *
-     * @return
      */
-    public static ChannelGroup getChannelGroup() {
-        return CHANNEL_GROUP;
+    public static Channel getChannel() {
+        return CHANNEL;
     }
 
 }

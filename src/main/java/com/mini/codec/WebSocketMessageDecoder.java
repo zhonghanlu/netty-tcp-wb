@@ -1,28 +1,26 @@
 package com.mini.codec;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mini.codec.proto.Message;
-import com.mini.codec.utils.ByteBufToMessageUtils;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.List;
 
 /**
- * @description:
- * @author: lld
- * @version: 1.0
+ * @description: 处理前端传入json，直接转为实体
+ * @author: zhl
  */
-public class WebSocketMessageDecoder extends MessageToMessageDecoder<BinaryWebSocketFrame> {
-    @Override
-    protected void decode(ChannelHandlerContext ctx, BinaryWebSocketFrame msg, List<Object> out) {
+public class WebSocketMessageDecoder extends MessageToMessageDecoder<TextWebSocketFrame> {
 
-        ByteBuf content = msg.content();
-        if (content.readableBytes() < 20) {
-            return;
-        }
-        Message message = ByteBufToMessageUtils.transition(content);
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    protected void decode(ChannelHandlerContext ctx, TextWebSocketFrame frame, List<Object> out) throws JsonProcessingException {
+        String payload = frame.text(); // 直接从TextWebSocketFrame中获取文本内容
+        Message message = objectMapper.readValue(payload, Message.class);
         out.add(message);
     }
 }
