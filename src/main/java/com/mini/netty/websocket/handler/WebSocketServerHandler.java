@@ -9,8 +9,11 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.mini.common.constant.NettyServerConstant.WEB_SOCKET_CLIENT_ID;
 import static com.mini.common.constant.NettyServerConstant.WEB_SOCKET_LINK;
@@ -28,8 +31,8 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
             // 重置地址
             request.setUri(WEB_SOCKET_LINK);
             // 获取用户ID,关联channel
-            WebSocketHolder.getUserChannelMap().put(clientId, ctx.channel());
             // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
+            WebSocketHolder.getUserChannelSetMap().computeIfAbsent(clientId, k -> new HashSet<>()).add(ctx.channel());
             AttributeKey<String> key = AttributeKey.valueOf(WEB_SOCKET_CLIENT_ID);
             ctx.channel().attr(key).setIfAbsent(clientId);
             // 回复消息
@@ -78,7 +81,10 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
     private void removeClientId(ChannelHandlerContext ctx) {
         AttributeKey<String> key = AttributeKey.valueOf(WEB_SOCKET_CLIENT_ID);
         String userId = ctx.channel().attr(key).get();
-        WebSocketHolder.getUserChannelMap().remove(userId);
+        WebSocketHolder.getUserChannelSetMap().get(userId).remove(ctx.channel());
+        if (WebSocketHolder.getUserChannelSetMap().get(userId).isEmpty()) {
+            WebSocketHolder.getUserChannelSetMap().remove(userId);
+        }
     }
 
     /**
@@ -106,14 +112,16 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
      * 通过解码器，将message信息转换为TextWebSocketFrame JSON
      */
     public static void sendToWebSocket(String clientId, Message message) {
-        Channel channel = WebSocketHolder.getUserChannelMap().get(clientId);
-        if (Objects.nonNull(channel)) {
-            ChannelFuture future = channel.writeAndFlush(message);
+        Set<Channel> channelSet = WebSocketHolder.getUserChannelSetMap().get(clientId);
+        if (!CollectionUtils.isEmpty(channelSet) && Objects.nonNull(message)) {
+            channelSet.forEach(channel -> {
+                ChannelFuture future = channel.writeAndFlush(message);
 
-            future.addListener((ChannelFutureListener) future1 -> {
-                if (!future1.isSuccess()) {
-                    log.error("websocket消息发送失败:{}", future1.cause().getMessage());
-                }
+                future.addListener((ChannelFutureListener) future1 -> {
+                    if (!future1.isSuccess()) {
+                        log.error("websocket消息发送失败:{} clientId:{} Message:{}", future1.cause().getMessage(), clientId, message);
+                    }
+                });
             });
         }
     }

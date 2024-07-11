@@ -5,6 +5,7 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -23,6 +24,11 @@ public class WebSocketHolder {
      * 存放用户与Chanel的对应信息，用于给指定用户发送消息
      */
     private static ConcurrentHashMap<String, Channel> CLIENTS_MAP = new ConcurrentHashMap<>();
+
+    /**
+     * 存放用户与Chanel的对应信息，用于给同一个clientId发送消息
+     */
+    private static ConcurrentHashMap<String, Set<Channel>> CLIENTS_SET_MAP = new ConcurrentHashMap<>();
 
     private WebSocketHolder() {
     }
@@ -43,6 +49,13 @@ public class WebSocketHolder {
      */
     public static ConcurrentMap<String, Channel> getUserChannelMap() {
         return CLIENTS_MAP;
+    }
+
+    /**
+     * 获取用户channel map
+     */
+    public static ConcurrentMap<String, Set<Channel>> getUserChannelSetMap() {
+        return CLIENTS_SET_MAP;
     }
 
 }

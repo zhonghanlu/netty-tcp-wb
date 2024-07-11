@@ -73,7 +73,7 @@ public class SimpleTCPServer {
         ServerSocket serverSocket = new ServerSocket(port);
         System.out.println("TCP模拟服务器启动，正在监听端口: " + port);
 
-        int[] clients = {111, 112, 113, 114};
+        int[] clients = {111, 112, 113};
 
         // 启动定时任务，每5秒发送一次消息
         scheduler.scheduleAtFixedRate(() -> {
@@ -88,7 +88,7 @@ public class SimpleTCPServer {
                 report.setExciteType((byte) 11);
                 report.setElectricity((short) (random.nextInt(9) + 1));
                 report.setResistance((short) 1);
-                report.setBattery((short) 11);
+                report.setBattery((short) 33);
                 report.setSignal((short) 1);
                 report.setResidueTime((byte) 11);
                 report.setExtra(0);

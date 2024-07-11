@@ -28,7 +28,7 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
         p.addLast(new WebSocketMessageEncoder());
         // 与WebSocketServerProtocolHandler切换位置，主要为了确保握手成功前取地址内的参数
         p.addLast(new WebSocketServerHandler());
-        // checkStartsWith 必须为TRUE 才能使用地址参数 未验证
+        // checkStartsWith 必须为TRUE 才能使用地址参数
         p.addLast(new WebSocketServerProtocolHandler(WEB_SOCKET_LINK, WEBSOCKET_PROTOCOL, true, 10485760));
     }
 }

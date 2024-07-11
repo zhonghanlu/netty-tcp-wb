@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <meta charset="UTF-8">
+    <title>WebSocket Real-Time Number Display</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+
+        }
+
+        .cip {
+            border: 2px solid black;
+        }
+
+        #dis {
+            width: 100%;
+            display: flex;
+            flex-direction: row; /* 改为水平排列 */
+            flex-wrap: nowrap; /* 防止换行 */
+        }
+
+        .device-info1, .device-info2, .device-info3, .device-info4 {
+            flex: 1;
+            height: 410px;
+            font-size: 1.2em;
+            text-align: left;
+            border: 2px solid black;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 顶部和底部留空隙 */
+            padding: 10px;
+        }
+
+        .device-info > div {
+            line-height: 1.5;
+        }
+
+        #chart1, #chart2, #chart3, #chart4 {
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="cip">
+    <div id="dis">
+        <div class="device-info1">
+            <div id="device1-deviceNo">设备编号：<span id="device111-deviceNo-s">待加载</span></div>
+            <div id="device1-runningState">运行状态：<span id="device111-runningState-s">待加载</span></div>
+            <div id="device1-exciteType">刺激类型：<span id="device111-exciteType-s">待加载</span></div>
+            <div id="device1-electricity" style="background: cornsilk">实测电流：<span
+                    id="device111-electricity-s">待加载</span></div>
+            <div id="device1-resistance">实测阻抗：<span id="device111-resistance-s">待加载</span></div>
+            <div id="device1-battery">电池电量：<span id="device111-battery-s">待加载</span></div>
+            <div id="device1-signal">信号强度：<span id="device111-signal-s">待加载</span></div>
+            <div id="device1-residueTime">剩余时间：<span id="device111-residueTime-s">待加载</span></div>
+            <div id="device1-opt">操作：
+                <button>启动</button>
+                <button>暂停</button>
+                <button>停止</button>
+            </div>
+        </div>
+        <div class="device-info2">
+            <div id="device2-deviceNo">设备编号：<span id="device112-deviceNo-s">待加载</span></div>
+            <div id="device2-runningState">运行状态：<span id="device112-runningState-s">待加载</span></div>
+            <div id="device2-exciteType">刺激类型：<span id="device112-exciteType-s">待加载</span></div>
+            <div id="device2-electricity" style="background: cornsilk">实测电流：<span
+                    id="device112-electricity-s">待加载</span></div>
+            <div id="device2-resistance">实测阻抗：<span id="device112-resistance-s">待加载</span></div>
+            <div id="device2-battery">电池电量：<span id="device112-battery-s">待加载</span></div>
+            <div id="device2-signal">信号强度：<span id="device112-signal-s">待加载</span></div>
+            <div id="device2-residueTime">剩余时间：<span id="device112-residueTime-s">待加载</span></div>
+            <div id="device1-opt">操作：
+                <button>启动</button>
+                <button>暂停</button>
+                <button>停止</button>
+            </div>
+        </div>
+        <div class="device-info3">
+            <div id="device3-deviceNo">设备编号：<span id="device113-deviceNo-s">待加载</span></div>
+            <div id="device3-runningState">运行状态：<span id="device113-runningState-s">待加载</span></div>
+            <div id="device3-exciteType">刺激类型：<span id="device113-exciteType-s">待加载</span></div>
+            <div id="device3-electricity" style="background: cornsilk">实测电流：<span
+                    id="device113-electricity-s">待加载</span></div>
+            <div id="device3-resistance">实测阻抗：<span id="device113-resistance-s">待加载</span></div>
+            <div id="device3-battery">电池电量：<span id="device113-battery-s">待加载</span></div>
+            <div id="device3-signal">信号强度：<span id="device113-signal-s">待加载</span></div>
+            <div id="device3-residueTime">剩余时间：<span id="device113-residueTime-s">待加载</span></div>
+            <div id="device1-opt">操作：
+                <button>启动</button>
+                <button>暂停</button>
+                <button>停止</button>
+            </div>
+        </div>
+        <div class="device-info4">
+            <div id="device4-deviceNo">设备编号：<span id="device114-deviceNo-s">待加载</span></div>
+            <div id="device4-runningState">运行状态：<span id="device114-runningState-s">待加载</span></div>
+            <div id="device4-exciteType">刺激类型：<span id="device114-exciteType-s">待加载</span></div>
+            <div id="device4-electricity" style="background: cornsilk">实测电流：<span
+                    id="device114-electricity-s">待加载</span></div>
+            <div id="device4-resistance">实测阻抗：<span id="device114-resistance-s">待加载</span></div>
+            <div id="device4-battery">电池电量：<span id="device114-battery-s">待加载</span></div>
+            <div id="device4-signal">信号强度：<span id="device114-signal-s">待加载</span></div>
+            <div id="device4-residueTime">剩余时间：<span id="device114-residueTime-s">待加载</span></div>
+            <div id="device1-opt">操作：
+                <button>启动</button>
+                <button>暂停</button>
+                <button>停止</button>
+            </div>
+        </div>
+
+    </div>
+    <div style="display: flex;width: 100%;">
+        <div id="chart1"></div>
+        <div id="chart2"></div>
+        <div id="chart3"></div>
+        <div id="chart4"></div>
+    </div>
+</div>
+<script>
+    function createWebSocketConnection(clientId, displayElement) {
+        const wsUrl = `ws://192.168.0.72:8080/ws?clientId=${clientId}`;
+        const socket = new WebSocket(wsUrl);
+
+        socket.onopen = function (event) {
+            // displayElement.textContent = 'Connected!';
+            // socket.send(`${clientId}`);
+        };
+
+        socket.onmessage = function (event) {
+            dataJson = JSON.parse(event.data);
+
+            const device_no = dataJson.messageHeader.deviceNo
+            document.getElementById(`device${device_no}-deviceNo-s`).textContent = dataJson.messageHeader.deviceNo
+            document.getElementById(`device${device_no}-runningState-s`).textContent = dataJson.messageHeader.runningState == 1 ? '运行中' : '暂停'
+            document.getElementById(`device${device_no}-exciteType-s`).textContent = dataJson.messageHeader.exciteType
+            document.getElementById(`device${device_no}-electricity-s`).textContent = dataJson.messageHeader.electricity
+            document.getElementById(`device${device_no}-resistance-s`).textContent = dataJson.messageHeader.resistance
+            document.getElementById(`device${device_no}-battery-s`).textContent = dataJson.messageHeader.battery
+            document.getElementById(`device${device_no}-signal-s`).textContent = dataJson.messageHeader.signal
+            document.getElementById(`device${device_no}-residueTime-s`).textContent = dataJson.messageHeader.residueTime
+
+            // dataJson.messagePack = {
+            //     command: 170,
+            //     deviceNo: 111,
+            //     runCommand: 2,
+            //     exciteType: 2,
+            //     electricityOut: 1,
+            //     extra: 2,
+            //     verify: 1
+            // }
+            // socket.send(JSON.stringify(dataJson))
+        };
+
+        socket.onerror = function (error) {
+            // console.error('WebSocket error:', error);
+            // displayElement.textContent = 'Error!';
+        };
+
+        socket.onclose = function (event) {
+            // displayElement.textContent = 'Disconnected!';
+        };
+    }
+
+    const displays = ['device-info1', 'device-info2', 'device-info3', 'device-info4'];
+    const list = [111, 112, 113, 114]
+    list.forEach((clientId, index) => {
+        const displayElement = document.getElementById(displays[index]);
+        createWebSocketConnection(clientId, displayElement);
+    });
+
+
+    function createEcharsWebSocketConnection(clientId, chartElement) {
+        const wsUrl = `ws://192.168.0.72:8080/ws?clientId=${clientId}`;
+        const socket = new WebSocket(wsUrl);
+        const chart = echarts.init(document.getElementById(chartElement));
+
+        let data = [];
+
+        const option = {
+            title: {text: '实测电流'},
+            tooltip: {},
+            xAxis: {type: 'category', boundaryGap: false},
+            yAxis: {type: 'value'},
+            series: [
+                {
+                    name: '电流',
+                    type: 'line',
+                    smooth: true,
+                    data: data,
+                },
+            ],
+        };
+
+        chart.setOption(option);
+
+        socket.onmessage = function (event) {
+
+            const dataJson = JSON.parse(event.data);
+            const device_no = dataJson.messageHeader.deviceNo;
+
+            // 更新数据
+            data.push(dataJson.messageHeader.electricity);
+            if (data.length > 50) { // 限制数据长度
+                data.shift();
+            }
+
+            // 更新图表数据
+            chart.setOption({
+                xAxis: {data: data.map((_, i) => i)},
+                series: [{data}]
+            });
+        };
+
+        // 省略其他 WebSocket 事件处理代码
+    }
+
+    const charts = ['chart1', 'chart2', 'chart3', 'chart4'];
+    // const list = [111, 112, 113, 114];
+    list.forEach((clientId, index) => {
+        createEcharsWebSocketConnection(clientId, charts[index]);
+    });
+
+</script>
+
+</body>
+</html>
