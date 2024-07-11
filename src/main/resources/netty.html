@@ -124,7 +124,7 @@
 </div>
 <script>
     function createWebSocketConnection(clientId, displayElement) {
-        const wsUrl = `ws://192.168.0.72:8080/ws?clientId=${clientId}`;
+        const wsUrl = `ws://192.168.0.72:8080/webSocket?clientId=${clientId}`;
         const socket = new WebSocket(wsUrl);
 
         socket.onopen = function (event) {
@@ -176,7 +176,7 @@
 
 
     function createEcharsWebSocketConnection(clientId, chartElement) {
-        const wsUrl = `ws://192.168.0.72:8080/ws?clientId=${clientId}`;
+        const wsUrl = `ws://192.168.0.72:8080/webSocket?clientId=${clientId}`;
         const socket = new WebSocket(wsUrl);
         const chart = echarts.init(document.getElementById(chartElement));
 
