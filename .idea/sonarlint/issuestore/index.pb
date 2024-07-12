@@ -33,8 +33,6 @@ i
 9src/main/java/com/mini/codec/WebSocketMessageDecoder.java,e\e\ee65daf16b2c20b9a7e6dd02cff05062fa06f2f1
 i
 9src/main/java/com/mini/codec/WebSocketMessageEncoder.java,9\8\98521a30abac96fbe4f701d7552dbdcce2de08e1
-o
-?src/main/java/com/mini/common/constant/NettyServerConstant.java,2\0\200d2b3a6f41c1234d2a1050f1e4b9bcd74ffe06
 g
 7src/main/java/com/mini/netty/utils/WebSocketHolder.java,9\b\9b0ae728300ed52eeb76f091b11cc802344f12b7
 g
@@ -50,3 +48,9 @@ g
 7src/main/java/com/mini/codec/ByteArrayDeserializer.java,6\8\6839eea3709c014d5341c00ad16e0f35a7008117
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+h
+8src/main/java/com/mini/constant/NettyServerConstant.java,a\0\a0d057676407fb18587d5905f9878041fd5dc84d
+S
+#src/main/java/com/mini/IPUtils.java,5\e\5e99e0fa2e8306c7c3584829374459be38518865
+[
++src/main/java/com/mini/NettyProperties.java,0\c\0c7ab6bb45eec52eae6732f2f696feef377ed9e2

@@ -1,25 +1,25 @@
 
 x
-java:S3740Š"/Provide the parametrized type for this generic.(Ğ«ïûÿÿÿÿ8¨ÔÜß‰2J$e6fc050e-0097-4eab-9cda-ee099c582ec5
+java:S3740Š"/Provide the parametrized type for this generic.(Ğ«ïûÿÿÿÿ8¨ÔÜß‰2J$2a1ade82-372b-4fe6-b639-d3f5f655911c
 s
-java:S3740"/Provide the parametrized type for this generic.(—ÊÚ˜8©ÔÜß‰2J$e5a4bc63-bbd3-48e5-9cc9-1066ed9082d3
+java:S3740"/Provide the parametrized type for this generic.(—ÊÚ˜8©ÔÜß‰2J$a2d8fe7b-e952-41eb-8194-83a1509a97e7
 x
-java:S3740‘"/Provide the parametrized type for this generic.(³ÏÃ§ûÿÿÿÿ8©ÔÜß‰2J$9cbba459-b111-4ddd-8339-3abec35807ce
+java:S3740‘"/Provide the parametrized type for this generic.(³ÏÃ§ûÿÿÿÿ8©ÔÜß‰2J$52401c2b-8a38-4fe4-a3de-c0b25e8ee04e
 x
-java:S3740‘"/Provide the parametrized type for this generic.(³ÏÃ§ûÿÿÿÿ8©ÔÜß‰2J$53df0303-f06e-4ced-9e71-69c6b624e2a2
+java:S3740‘"/Provide the parametrized type for this generic.(³ÏÃ§ûÿÿÿÿ8©ÔÜß‰2J$c93b9af1-095d-4840-8e3d-cde048aab77d
 ’
-java:S2095I"JUse try-with-resources or close this "ServerSocket" in a "finally" clause.(íîÁ¿ùÿÿÿÿ8£ãß‰2J$edecbaf2-94eb-497f-8dad-9b2e56dba6fb
+java:S2095I"JUse try-with-resources or close this "ServerSocket" in a "finally" clause.(íîÁ¿ùÿÿÿÿ8£ãß‰2J$3658c57c-d6b9-44e7-87ae-6e8723fdbab7
 j
-java:S2189""Add an end condition to this loop.(˜ïˆÿÿÿÿÿ8£ãß‰2J$58d2e555-25b1-4ee9-911e-bb4a66169a96
-ƒ	java:S125 "<This block of commented-out lines of code should be removed.(Œúçæıÿÿÿÿ8ÌÔÜß‰2J$821c345c-569b-4fb4-8fe5-657981f4a292
-l	java:S106J"+Replace this use of System.out by a logger.(Š¦‚8ÌÔÜß‰2J$5cae304b-dd53-4f5b-aa0e-b3d26cbe5b15
-r	java:S106z"+Replace this use of System.out by a logger.(³§ËÎÿÿÿÿÿ8ÎÔÜß‰2J$8ebcd742-34c5-4d77-8faa-015bf22a8e4b
-m	java:S106‡"+Replace this use of System.out by a logger.(ˆì¢L8ÏÔÜß‰2J$f273680a-910f-4b6a-b40e-cbd1d3ad9f5f
-s	java:S106ˆ"+Replace this use of System.out by a logger.(õ®Ã€şÿÿÿÿ8ÏÔÜß‰2J$158d5147-9a76-4138-8240-cc2a3d1f5573
-s	java:S106‹"+Replace this use of System.out by a logger.(Öªëøÿÿÿÿ8ÏÔÜß‰2J$39760d4e-a16c-4e33-89a0-1db924629113
+java:S2189""Add an end condition to this loop.(˜ïˆÿÿÿÿÿ8£ãß‰2J$73db5690-071b-4c8b-a566-de80658badc9
+ƒ	java:S125 "<This block of commented-out lines of code should be removed.(Œúçæıÿÿÿÿ8ÌÔÜß‰2J$64df6bf7-6911-4af6-b95a-c1467bf232c9
+l	java:S106J"+Replace this use of System.out by a logger.(Š¦‚8ÌÔÜß‰2J$98ebc5df-df95-44de-bc1e-3cbdfe156312
+r	java:S106z"+Replace this use of System.out by a logger.(³§ËÎÿÿÿÿÿ8ÎÔÜß‰2J$94eafe1b-5c9d-492e-bf72-3340de2480a8
+m	java:S106‡"+Replace this use of System.out by a logger.(ˆì¢L8ÏÔÜß‰2J$cf626507-83a9-4b99-8786-0c8d3ece4e86
+s	java:S106ˆ"+Replace this use of System.out by a logger.(õ®Ã€şÿÿÿÿ8ÏÔÜß‰2J$3e2c7c47-f039-4e4e-ac11-f7a6d407c8b7
+s	java:S106‹"+Replace this use of System.out by a logger.(Öªëøÿÿÿÿ8ÏÔÜß‰2J$181b8865-9fef-448c-9764-2eae828c4216
 s
-java:S1068"0Remove this unused "objectMapper" private field.(œ‡¨ 8ÑÔÜß‰2J$ec448749-d6f3-4d83-9cfd-a693329b2589
+java:S1068"0Remove this unused "objectMapper" private field.(œ‡¨ 8ÑÔÜß‰2J$4571d8ca-e3b0-4cbc-89c9-e78f8881cb56
 q
-java:S1068")Remove this unused "bytes" private field.(ç‰Ğ¡ûÿÿÿÿ8¡£ãß‰2J$21fd0510-e8fe-4113-9994-04ce6f126b11
+java:S1068")Remove this unused "bytes" private field.(ç‰Ğ¡ûÿÿÿÿ8¡£ãß‰2J$aaa61c95-ff44-440e-be97-4e7724caf42a
 p
-java:S1068"-Remove this unused "bytesList" private field.(„é±ª8ÑÔÜß‰2J$16a14b51-e1d5-4074-9aab-6f4d0f674751
+java:S1068"-Remove this unused "bytesList" private field.(„é±ª8ÑÔÜß‰2J$65bde5f0-b4ef-4f2f-914e-a97164fe84e3

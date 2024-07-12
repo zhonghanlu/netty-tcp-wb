@@ -1,0 +1,22 @@
+# 自建netty形式TCP客户端 自定义websocket参数
+
+netty:
+  # websocket是否开启 默认开启
+  web-socket-enabled: true
+  # websocket端口 默认18080
+  web-socket-port: 8080
+  # websocket访问前缀 默认/ws
+  web-socket-prefix: /webSocket
+
+  # tcp服务端是否开启 默认开启
+  tcp-server-enabled: true
+  # tcp服务端地址 默认本机
+  tcp-server-host: 192.168.0.72
+  # tcp服务端端口 默认18888
+  tcp-server-port: 18888
+  # tcp服务端是否开启断线重连 默认开启
+  tcp-server-retrying-enabled: true
+  # tcp服务端重连间隔时间 默认3秒
+  tcp-server-retrying-interval: 3
+
+
