@@ -24,6 +24,7 @@ public class NettyTcpClientHandler extends SimpleChannelInboundHandler<Message> 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
         // 通过解码器，将byteBuf字节数据转换为实体， 回执给websocket，响应给前端
+        log.info("收到TCP消息客户端消息：{}", msg);
         WebSocketServerHandler.sendToWebSocket(String.valueOf(msg.getMessageHeader().getDeviceNo()), msg);
     }
 
@@ -46,7 +47,7 @@ public class NettyTcpClientHandler extends SimpleChannelInboundHandler<Message> 
      * 将websocket消息，回传给TCP服务端-》相对当前TCP客户端的服务端
      * websocket消息通过TextWebSocketFrame 转为实体，在通过TCP客户端的编码将实体转为byteBuf
      */
-    public static void sendToTcpServer(Message data) {
+    public static void sendToTcpServer(String data) {
         Channel channel = TcpSocketHolder.getChannel();
         if (Objects.nonNull(channel)) {
             ChannelFuture future = channel.writeAndFlush(data);

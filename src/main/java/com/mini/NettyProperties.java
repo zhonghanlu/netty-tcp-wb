@@ -42,7 +42,7 @@ public class NettyProperties {
     /**
      * tcp服务端端口
      */
-    private int tcpServerPort = 18888;
+    private int tcpServerPort = 1888;
 
     public static int TCP_SERVER_PORT;
 
@@ -74,33 +74,33 @@ public class NettyProperties {
     /**
      * tcp服务端是否开启断线重连
      */
-    private boolean tcpServerRetryingEnabled = true;
+    private boolean tcpClientRetryingEnabled = true;
 
-    public static boolean TCP_SERVER_RETRYING_ENABLED;
+    public static boolean TCP_CLIENT_RETRYING_ENABLED;
 
     @PostConstruct
     public void setTcpServerRetryingEnabled() {
-        TCP_SERVER_RETRYING_ENABLED = this.tcpServerRetryingEnabled;
+        TCP_CLIENT_RETRYING_ENABLED = this.tcpClientRetryingEnabled;
     }
 
     public boolean getTcpServerRetryingEnabled() {
-        return TCP_SERVER_RETRYING_ENABLED;
+        return TCP_CLIENT_RETRYING_ENABLED;
     }
 
     /**
      * tcp服务端断线重连频率
      */
-    private int tcpServerRetryingInterval = 3;
+    private int tcpClientRetryingInterval = 3;
 
-    public static int TCP_SERVER_RETRYING_INTERVAL;
+    public static int TCP_CLIENT_RETRYING_INTERVAL;
 
     @PostConstruct
     public void setTcpServerRetryingTimes() {
-        TCP_SERVER_RETRYING_INTERVAL = this.tcpServerRetryingInterval;
+        TCP_CLIENT_RETRYING_INTERVAL = this.tcpClientRetryingInterval;
     }
 
     public int getTcpServerRetryingTimes() {
-        return TCP_SERVER_RETRYING_INTERVAL;
+        return TCP_CLIENT_RETRYING_INTERVAL;
     }
 
     // =====================分割线======================

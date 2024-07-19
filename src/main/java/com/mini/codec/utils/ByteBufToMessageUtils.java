@@ -13,17 +13,25 @@ public class ByteBufToMessageUtils {
     public static Message transition(ByteBuf in) {
 
         MessageHeader messageHeader = new MessageHeader();
-        messageHeader.setCommand(in.readByte() & 0xFF);
-        messageHeader.setHospNo(in.readShort());
         messageHeader.setDeviceNo(in.readByte());
+        messageHeader.setFlag(in.readByte());
+        messageHeader.setHospNoH(in.readByte());
+        messageHeader.setHospNoL(in.readByte());
+        messageHeader.setDeviceNoExtra(in.readByte());
         messageHeader.setRunningState(in.readByte());
         messageHeader.setExciteType(in.readByte());
-        messageHeader.setElectricity(in.readShort());
-        messageHeader.setResistance(in.readShort());
-        messageHeader.setBattery(in.readShort());
-        messageHeader.setSignal(in.readShort());
-        messageHeader.setResidueTime(in.readByte());
-        messageHeader.setExtra(in.readInt());
+        messageHeader.setElectricityH(in.readByte());
+        messageHeader.setElectricityL(in.readByte());
+        messageHeader.setResistanceH(in.readByte());
+        messageHeader.setResistanceL(in.readByte());
+        messageHeader.setBattery(in.readByte());
+        messageHeader.setSignal(in.readByte());
+        messageHeader.setResidueTimeH(in.readByte());
+        messageHeader.setResidueTimeL(in.readByte());
+        messageHeader.setExtraA(in.readByte());
+        messageHeader.setExtraB(in.readByte());
+        messageHeader.setExtraC(in.readByte());
+        messageHeader.setExtraD(in.readByte());
         messageHeader.setVerify(in.readByte());
 
         Message message = new Message();

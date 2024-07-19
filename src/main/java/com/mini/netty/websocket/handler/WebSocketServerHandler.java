@@ -45,7 +45,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
         // 发送给TCP服务端，根据指令区分操作类型，
         // 1.开关暂停指令 TODO：定制化操作硬件
-        NettyTcpClientHandler.sendToTcpServer(msg);
+        NettyTcpClientHandler.sendToTcpServer(msg.getMessagePack().getOptCommand());
 //        log.info("websocket服务器收到消息：{}", msg);
     }
 

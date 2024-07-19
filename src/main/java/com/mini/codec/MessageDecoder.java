@@ -19,10 +19,12 @@ public class MessageDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
 
-        if (in.readableBytes() < 20) {
+        if (in.readableBytes() != 20) {
             log.error("接收字节数据载荷大小有误");
             return;
         }
+
+        // TODO: 校验
 
         Message message = ByteBufToMessageUtils.transition(in);
 

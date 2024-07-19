@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <script src="echarts.min.js"></script>
     <meta charset="UTF-8">
     <title>WebSocket Real-Time Number Display</title>
     <style>
@@ -124,7 +124,7 @@
 </div>
 <script>
     function createWebSocketConnection(clientId, displayElement) {
-        const wsUrl = `ws://192.168.0.72:8080/webSocket?clientId=${clientId}`;
+        const wsUrl = `ws://192.168.1.102:8080/webSocket?clientId=${clientId}`;
         const socket = new WebSocket(wsUrl);
 
         socket.onopen = function (event) {
@@ -132,29 +132,50 @@
             // socket.send(`${clientId}`);
         };
 
+        let count = 0
+
         socket.onmessage = function (event) {
             dataJson = JSON.parse(event.data);
 
+            console.log(dataJson.messageHeader)
+            if (count == 0) {
+                console.log(dataJson.messageHeader)
+                dataJson.messagePack = {
+                    optCommand: "HA1A01050000000000002500"
+                }
+                socket.send(JSON.stringify(dataJson))
+                count++
+            }
             const device_no = dataJson.messageHeader.deviceNo
             document.getElementById(`device${device_no}-deviceNo-s`).textContent = dataJson.messageHeader.deviceNo
             document.getElementById(`device${device_no}-runningState-s`).textContent = dataJson.messageHeader.runningState == 1 ? '运行中' : '暂停'
-            document.getElementById(`device${device_no}-exciteType-s`).textContent = dataJson.messageHeader.exciteType
-            document.getElementById(`device${device_no}-electricity-s`).textContent = dataJson.messageHeader.electricity
-            document.getElementById(`device${device_no}-resistance-s`).textContent = dataJson.messageHeader.resistance
-            document.getElementById(`device${device_no}-battery-s`).textContent = dataJson.messageHeader.battery
-            document.getElementById(`device${device_no}-signal-s`).textContent = dataJson.messageHeader.signal
-            document.getElementById(`device${device_no}-residueTime-s`).textContent = dataJson.messageHeader.residueTime
 
-            // dataJson.messagePack = {
-            //     command: 170,
-            //     deviceNo: 111,
-            //     runCommand: 2,
-            //     exciteType: 2,
-            //     electricityOut: 1,
-            //     extra: 2,
-            //     verify: 1
-            // }
-            // socket.send(JSON.stringify(dataJson))
+            let exciteType1 = ""
+            if (dataJson.messageHeader.exciteType == 0) {
+                exciteType1 = "TDCS"
+            } else if (dataJson.messageHeader.exciteType == 1) {
+                exciteType1 = "TPCS"
+            } else if (dataJson.messageHeader.exciteType == 2) {
+                exciteType1 = "TACS"
+            } else {
+                exciteType1 = "TRNS"
+            }
+
+            document.getElementById(`device${device_no}-exciteType-s`).textContent = exciteType1
+            document.getElementById(`device${device_no}-electricity-s`).textContent = dataJson.messageHeader.electricityH * 256 + dataJson.messageHeader.electricityL
+            document.getElementById(`device${device_no}-resistance-s`).textContent = dataJson.messageHeader.resistanceH * 256 + dataJson.messageHeader.resistanceL
+            document.getElementById(`device${device_no}-battery-s`).textContent = dataJson.messageHeader.battery
+
+            let ap_rssi = 0
+            let si = dataJson.messageHeader.signal
+            if (si > 127)
+                ap_rssi = si - 256;
+            else
+                ap_rssi = si
+
+            document.getElementById(`device${device_no}-signal-s`).textContent = ap_rssi
+            document.getElementById(`device${device_no}-residueTime-s`).textContent = ((dataJson.messageHeader.residueTimeH * 256 + dataJson.messageHeader.residueTimeL) / 60) / 60
+
         };
 
         socket.onerror = function (error) {
@@ -176,7 +197,7 @@
 
 
     function createEcharsWebSocketConnection(clientId, chartElement) {
-        const wsUrl = `ws://192.168.0.72:8080/webSocket?clientId=${clientId}`;
+        const wsUrl = `ws://192.168.1.102:8080/webSocket?clientId=${clientId}`;
         const socket = new WebSocket(wsUrl);
         const chart = echarts.init(document.getElementById(chartElement));
 
@@ -205,7 +226,7 @@
             const device_no = dataJson.messageHeader.deviceNo;
 
             // 更新数据
-            data.push(dataJson.messageHeader.electricity);
+            data.push(-(dataJson.messageHeader.electricityH * 256 + dataJson.messageHeader.electricityL));
             if (data.length > 50) { // 限制数据长度
                 data.shift();
             }
