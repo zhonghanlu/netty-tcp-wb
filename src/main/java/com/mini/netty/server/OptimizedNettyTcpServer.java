@@ -2,7 +2,7 @@ package com.mini.netty.server;
 
 import com.mini.NettyProperties;
 import com.mini.codec.MessageDecoder;
-import com.mini.netty.server.handler.NettyTcpClientHandler;
+import com.mini.netty.server.handler.NettyTcpServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -42,7 +42,7 @@ public class OptimizedNettyTcpServer implements ApplicationRunner {
 //                    ch.pipeline().addLast(new MessageEncoder());
                         ch.pipeline().addLast(new IdleStateHandler(40, 0, 0, TimeUnit.SECONDS));
 //                    ch.pipeline().addLast(new HeartBeatTcpServerHandler());
-                        ch.pipeline().addLast(new NettyTcpClientHandler());
+                        ch.pipeline().addLast(new NettyTcpServerHandler());
                     }
                 });
     }

@@ -2,7 +2,7 @@ package com.mini.netty.websocket.handler;
 
 import com.mini.NettyProperties;
 import com.mini.codec.proto.Message;
-import com.mini.netty.server.handler.NettyTcpClientHandler;
+import com.mini.netty.server.handler.NettyTcpServerHandler;
 import com.mini.netty.utils.WebSocketHolder;
 import com.mini.netty.websocket.msgpack.MsgPack;
 import io.netty.channel.*;
@@ -51,7 +51,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
             log.info("客户端主动调用,调用码值：{}", optCommand);
         }
 
-        NettyTcpClientHandler.sendToTcpServer(optCommand);
+        NettyTcpServerHandler.sendToTcpServer(optCommand);
     }
 
 
