@@ -1,9 +1,8 @@
-package com.mini.netty.client;
+package com.mini.netty.server;
 
 import com.mini.NettyProperties;
 import com.mini.codec.MessageDecoder;
-import com.mini.codec.MessageEncoder;
-import com.mini.netty.client.handler.NettyTcpClientHandler;
+import com.mini.netty.server.handler.NettyTcpClientHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

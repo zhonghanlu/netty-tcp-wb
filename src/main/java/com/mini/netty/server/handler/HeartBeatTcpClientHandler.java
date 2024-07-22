@@ -1,4 +1,4 @@
-package com.mini.netty.client.handler;
+package com.mini.netty.server.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

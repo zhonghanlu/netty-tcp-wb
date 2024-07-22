@@ -124,7 +124,7 @@
 </div>
 <script>
     function createWebSocketConnection(clientId, displayElement) {
-        const wsUrl = `ws://192.168.1.101:8080/webSocket?clientId=${clientId}`;
+        const wsUrl = `ws://192.168.1.100:8080/webSocket?clientId=${clientId}`;
         const socket = new WebSocket(wsUrl);
 
         socket.onopen = function (event) {
@@ -141,37 +141,38 @@
 
             // "HA1A01050000000000002500"
 
-            // if (count == 0) {
-            //     console.log(dataJson.messageHeader)
-            //     dataJson.messagePack = {
-            //         // optCommand: "HA1A01050000000000002500"
-            //         optCommand:'ZZ',
-            //         exciteTypePack:'A',
-            //         direction:'0',
-            //         electricity1:'1',
-            //         electricity2:'0',
-            //         electricity3:'5',
-            //         electricity4:'0',
-            //         rate1:'0',
-            //         rate2:'0',
-            //         rate3:'0',
-            //         rate4:'0',
-            //         pulse1:'0',
-            //         pulse2:'0',
-            //         pulse3:'0',
-            //         pulse4:'0',
-            //         pulse5:'0',
-            //         pulse6:'0',
-            //         time1:'0',
-            //         time2:'2',
-            //         time3:'5',
-            //         isExcite:'0',
-            //         extraPack:'0',
-            //
-            //     }
-            //     socket.send(JSON.stringify(dataJson))
-            //     count++
-            // }
+            if (count == 0) {
+                console.log(dataJson.messageHeader)
+                dataJson.messagePack = {
+                    // optCommand: "HA1A01050000000000002500"
+                    optCommand:'C',
+                    exciteTypePack:'A',
+
+                    direction:'0',
+                    electricity1:'0',
+                    electricity2:'2',
+                    electricity3:'6',
+                    electricity4:'0',
+                    rate1:'0',
+                    rate2:'0',
+                    rate3:'0',
+                    rate4:'0',
+                    pulse1:'0',
+                    pulse2:'0',
+                    pulse3:'0',
+                    pulse4:'0',
+                    pulse5:'0',
+                    pulse6:'0',
+                    time1:'0',
+                    time2:'0',
+                    time3:'1',
+                    isExcite:'0',
+                    extraPack:'0',
+
+                }
+                socket.send(JSON.stringify(dataJson))
+                count++
+            }
             const device_no = dataJson.messageHeader.deviceNo
             document.getElementById(`device${device_no}-deviceNo-s`).textContent = dataJson.messageHeader.deviceNo
             document.getElementById(`device${device_no}-runningState-s`).textContent = dataJson.messageHeader.runningState == 1 ? '运行中' : '暂停'
@@ -223,7 +224,7 @@
 
 
     function createEcharsWebSocketConnection(clientId, chartElement) {
-        const wsUrl = `ws://192.168.1.101:8080/webSocket?clientId=${clientId}`;
+        const wsUrl = `ws://192.168.1.100:8080/webSocket?clientId=${clientId}`;
         const socket = new WebSocket(wsUrl);
         const chart = echarts.init(document.getElementById(chartElement));
 

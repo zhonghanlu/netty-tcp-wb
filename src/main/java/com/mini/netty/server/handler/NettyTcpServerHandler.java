@@ -1,4 +1,4 @@
-package com.mini.netty.client.handler;
+package com.mini.netty.server.handler;
 
 import com.mini.codec.proto.Message;
 import com.mini.netty.utils.TcpSocketHolder;
@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class NettyTcpClientHandler extends SimpleChannelInboundHandler<Message> {
+public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
