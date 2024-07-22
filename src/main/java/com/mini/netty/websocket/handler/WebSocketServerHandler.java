@@ -4,6 +4,7 @@ import com.mini.NettyProperties;
 import com.mini.codec.proto.Message;
 import com.mini.netty.client.handler.NettyTcpClientHandler;
 import com.mini.netty.utils.WebSocketHolder;
+import com.mini.netty.websocket.msgpack.MsgPack;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -44,24 +45,27 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
         // 发送给TCP服务端，根据指令区分操作类型，
-        // 1.开关暂停指令 TODO：定制化操作硬件
-        NettyTcpClientHandler.sendToTcpServer(msg.getMessagePack().getOptCommand());
-//        log.info("websocket服务器收到消息：{}", msg);
+        String optCommand = "";
+        if (Objects.nonNull(msg.getMessagePack())) {
+            optCommand = MsgPack.handlerPack(msg.getMessagePack());
+            log.info("客户端主动调用,调用码值：{}", optCommand);
+        }
+
+        NettyTcpClientHandler.sendToTcpServer(optCommand);
     }
+
 
     /**
      * 一但连接第一调用
      */
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
-//        log.info("handlerAdded 被调用" + ctx.channel().id().asLongText());
         // 添加到channelGroup 通道组
         WebSocketHolder.getChannelGroup().add(ctx.channel());
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-//        log.info("handlerRemoved 被调用" + ctx.channel().id().asLongText());
         WebSocketHolder.getChannelGroup().remove(ctx.channel());
         removeClientId(ctx);
     }

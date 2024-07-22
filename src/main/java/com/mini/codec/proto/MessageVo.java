@@ -1,5 +1,7 @@
 package com.mini.codec.proto;
 
+import com.mini.codec.enums.ExciteType;
+import com.mini.codec.enums.RunOrStop;
 import lombok.Data;
 
 /**
@@ -66,25 +68,25 @@ public class MessageVo {
      * 保留字段
      * 1 字节
      */
-    private int extraA;
+    private String extraA;
 
     /**
      * 保留字段
      * 1 字节
      */
-    private int extraB;
+    private String extraB;
 
     /**
      * 保留字段
      * 1 字节
      */
-    private int extraC;
+    private String extraC;
 
     /**
      * 保留字段
      * 1 字节
      */
-    private int extraD;
+    private String extraD;
 
     /**
      * 校验字段

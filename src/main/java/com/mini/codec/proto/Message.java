@@ -12,11 +12,14 @@ public class Message {
 
     private MessagePack messagePack;
 
+    private MessageVo messageVo;
+
     @Override
     public String toString() {
         return "Message{" +
                 "messageHeader=" + messageHeader +
                 ", messagePack=" + messagePack +
+                ", messageVo=" + messageVo +
                 '}';
     }
 

@@ -58,3 +58,11 @@ p
 @src/main/java/com/mini/netty/client/OptimizedNettyTcpServer.java,5\2\52e9419f530f77811e13018451c5e9e9ba15352b
 a
 1src/main/java/com/mini/codec/proto/MessageVo.java,e\0\e02986910670c23f392813438470d928e53d03df
+c
+3src/main/java/com/mini/codec/enums/StartOrStop.java,1\2\122f34a98ed130e1b4d01fb5e3b01b948440abaa
+a
+1src/main/java/com/mini/codec/enums/RunOrStop.java,3\8\38dea94c0238e36a019db32cbd0ccc8d59c44edb
+b
+2src/main/java/com/mini/codec/enums/ExciteType.java,c\8\c8ffec76bc60760fa4b6fe0dfc5c1cd69aa37cd7
+k
+;src/main/java/com/mini/netty/websocket/msgpack/MsgPack.java,f\5\f50e4b0961ff76e6302c788ad068d3da210d77bf

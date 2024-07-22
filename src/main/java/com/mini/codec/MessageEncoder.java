@@ -77,17 +77,17 @@ public class MessageEncoder extends MessageToByteEncoder<Message> {
         ByteBuf byteBuf = Unpooled.buffer(FIXED_MESSAGE_SIZE);
 
         // 写入各个字段
-        byteBuf.writeByte(msgBody.getCommand()); // 包头
-        byteBuf.writeByte(msgBody.getDeviceNo()); // 设备编号
-        byteBuf.writeByte(msgBody.getRunCommand()); // 运行指令
-        byteBuf.writeByte(msgBody.getExciteType()); // 刺激类型
-        byteBuf.writeShort(msgBody.getElectricityOut()); // 输出电流
-
-        // 写入保留字段，假设总是13字节
-        byteBuf.writeBytes(msgBody.getExtra());
-
-        // 写入校验字段
-        byteBuf.writeByte(msgBody.getVerify());
+//        byteBuf.writeByte(msgBody.getCommand()); // 包头
+//        byteBuf.writeByte(msgBody.getDeviceNo()); // 设备编号
+//        byteBuf.writeByte(msgBody.getRunCommand()); // 运行指令
+//        byteBuf.writeByte(msgBody.getExciteType()); // 刺激类型
+//        byteBuf.writeShort(msgBody.getElectricityOut()); // 输出电流
+//
+//        // 写入保留字段，假设总是13字节
+//        byteBuf.writeBytes(msgBody.getExtra());
+//
+//        // 写入校验字段
+//        byteBuf.writeByte(msgBody.getVerify());
 
         // 读取ByteBuf中的字节到数组
         byte[] bytes = new byte[byteBuf.readableBytes()];

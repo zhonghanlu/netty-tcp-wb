@@ -30,7 +30,6 @@ public class NettyTcpClientHandler extends SimpleChannelInboundHandler<Message> 
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-//        log.info("handlerRemoved 被调用" + ctx.channel().id().asLongText());
         TcpSocketHolder.del();
     }
 

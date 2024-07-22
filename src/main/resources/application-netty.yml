@@ -11,12 +11,12 @@ netty:
   # tcp服务端是否开启 默认开启
   tcp-server-enabled: true
   # tcp服务端地址 默认本机
-  tcp-server-host: 192.168.1.102
+  tcp-server-host: 192.168.1.101
   # tcp服务端端口 默认1888
   tcp-server-port: 1888
-  # tcp服务端是否开启断线重连 默认开启
-  tcp-client-retrying-enabled: true
-  # tcp服务端重连间隔时间 默认3秒
+  # tcp客户端是否开启断线重连 默认开启
+  tcp-client-retrying-enabled: false
+  # tcp客户端重连间隔时间 默认3秒
   tcp-client-retrying-interval: 3
 
 
