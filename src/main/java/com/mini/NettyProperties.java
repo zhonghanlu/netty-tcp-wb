@@ -1,5 +1,6 @@
 package com.mini;
 
+import com.mini.netty.utils.IPUtils;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

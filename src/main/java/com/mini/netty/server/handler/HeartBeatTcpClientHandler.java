@@ -8,10 +8,9 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
+//@Component
 public class HeartBeatTcpClientHandler extends ChannelInboundHandlerAdapter {
 
     /**

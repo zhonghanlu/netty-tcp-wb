@@ -1,10 +1,9 @@
-//package com.mini.netty.client;
+package com.mini.netty.server;//package com.ruoyi.netty.server;//package com.mini.netty.client;
 //
-//import com.mini.NettyProperties;
-//import com.mini.codec.MessageDecoder;
-//import com.mini.codec.MessageEncoder;
-//import com.mini.netty.client.handler.HeartBeatTcpClientHandler;
-//import com.mini.netty.client.handler.NettyTcpClientHandler;
+//import com.ruoyi.NettyProperties;
+//import com.ruoyi.codec.MessageDecoder;
+//import com.ruoyi.codec.MessageEncoder;
+//import com.ruoyi.netty.server.handler.HeartBeatTcpClientHandler;
 //import io.netty.bootstrap.Bootstrap;
 //import io.netty.channel.*;
 //import io.netty.channel.nio.NioEventLoopGroup;
@@ -13,17 +12,20 @@
 //import io.netty.handler.timeout.IdleStateHandler;
 //import io.netty.util.concurrent.DefaultEventExecutor;
 //import lombok.extern.slf4j.Slf4j;
-//import org.springframework.boot.ApplicationArguments;
-//import org.springframework.boot.ApplicationRunner;
 //import org.springframework.stereotype.Component;
 //
 //import javax.annotation.PreDestroy;
 //import java.util.concurrent.TimeUnit;
 //import java.util.concurrent.atomic.AtomicBoolean;
 //
+//
+///**
+// * @author zhl
+// * @decription 自建客户端，暂未使用
+// */
 //@Slf4j
-//@Component
-//public class OptimizedNettyTcpClient implements ApplicationRunner {
+////@Component
+//public class OptimizedNettyTcpClient { // implements ApplicationRunner
 //
 //    private final EventLoopGroup group = new NioEventLoopGroup();
 //
@@ -59,17 +61,17 @@
 //                    //unit：时间参数的格式
 //                    ch.pipeline().addLast(new IdleStateHandler(40, 0, 0, TimeUnit.SECONDS));
 //                    ch.pipeline().addLast(new HeartBeatTcpClientHandler());
-//                    ch.pipeline().addLast(new NettyTcpClientHandler());
+////                    ch.pipeline().addLast(new NettyTcpClientHandler());
 //                }
 //            });
 //    }
 //
-//    @Override
-//    public void run(ApplicationArguments args) {
-//        if (NettyProperties.TCP_SERVER_ENABLED) {
-//            doConnect();
-//        }
-//    }
+////    @Override
+////    public void run(ApplicationArguments args) {
+////        if (NettyProperties.TCP_SERVER_ENABLED) {
+////            doConnect();
+////        }
+////    }
 //
 //    /**
 //     * 重试监听
@@ -79,8 +81,8 @@
 //            if (!closeFutureListenerAdded) {
 //                channel.closeFuture().addListener((ChannelFutureListener) f -> {
 //                    log.error("Connection lost. Attempting to reconnect. Retrying in {} seconds.",
-//                        NettyProperties.TCP_SERVER_RETRYING_INTERVAL);
-//                    executor.schedule(this::doConnect, NettyProperties.TCP_SERVER_RETRYING_INTERVAL, TimeUnit.SECONDS);
+//                        NettyProperties.TCP_CLIENT_RETRYING_INTERVAL);
+//                    executor.schedule(this::doConnect, NettyProperties.TCP_CLIENT_RETRYING_INTERVAL, TimeUnit.SECONDS);
 //                });
 //                // 标志位设置为true，表示已经添加过监听器
 //                closeFutureListenerAdded = true;
@@ -90,8 +92,8 @@
 //                });
 //                channel.closeFuture().addListener((ChannelFutureListener) f -> {
 //                    log.error("Connection lost. Attempting to reconnect. Retrying in {} seconds.",
-//                        NettyProperties.TCP_SERVER_RETRYING_INTERVAL);
-//                    executor.schedule(this::doConnect, NettyProperties.TCP_SERVER_RETRYING_INTERVAL, TimeUnit.SECONDS);
+//                        NettyProperties.TCP_CLIENT_RETRYING_INTERVAL);
+//                    executor.schedule(this::doConnect, NettyProperties.TCP_CLIENT_RETRYING_INTERVAL, TimeUnit.SECONDS);
 //                });
 //            }
 //        }
@@ -110,15 +112,15 @@
 //                        log.info("Connected to TCP server at {}:{}", NettyProperties.TCP_SERVER_HOST,
 //                            NettyProperties.TCP_SERVER_PORT);
 //                        // 添加监听处理后续断线重连
-//                        if (NettyProperties.TCP_SERVER_RETRYING_ENABLED) {
+//                        if (NettyProperties.TCP_CLIENT_RETRYING_ENABLED) {
 //                            addCloseFutureListenerIfNecessary();
 //                        }
 //                    } else {
-//                        if (NettyProperties.TCP_SERVER_RETRYING_ENABLED) {
+//                        if (NettyProperties.TCP_CLIENT_RETRYING_ENABLED) {
 //                            log.error("Failed to connect to server at {}:{}. Retrying in {} seconds.",
 //                                NettyProperties.TCP_SERVER_HOST, NettyProperties.TCP_SERVER_PORT,
-//                                NettyProperties.TCP_SERVER_RETRYING_INTERVAL);
-//                            executor.schedule(this::doConnect, NettyProperties.TCP_SERVER_RETRYING_INTERVAL, TimeUnit.SECONDS);
+//                                NettyProperties.TCP_CLIENT_RETRYING_INTERVAL);
+//                            executor.schedule(this::doConnect, NettyProperties.TCP_CLIENT_RETRYING_INTERVAL, TimeUnit.SECONDS);
 //                        }
 //                    }
 //                });

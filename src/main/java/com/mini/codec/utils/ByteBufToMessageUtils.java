@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -63,7 +62,7 @@ public class ByteBufToMessageUtils {
         // 设备编号
         messageVo.setDeviceNo(String.valueOf(messageHeader.getDeviceNo()));
         // 医院编号
-        messageVo.setHospNo(String.valueOf(messageHeader.getHospNoH()) + String.valueOf(messageHeader.getHospNoL()));
+        messageVo.setHospNo(String.valueOf(messageHeader.getHospNoH() * 256 + messageHeader.getHospNoL()));
         // 运行状态
         messageVo.setRunningState(RunOrStop.fromStringValue(String.valueOf(messageHeader.getRunningState())));
         // 刺激类型

@@ -1,7 +1,5 @@
 package com.mini.codec.proto;
 
-import com.mini.codec.enums.ExciteType;
-import com.mini.codec.enums.RunOrStop;
 import lombok.Data;
 
 /**

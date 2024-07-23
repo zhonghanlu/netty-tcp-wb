@@ -2,17 +2,16 @@ package com.mini.codec;
 
 import com.mini.codec.proto.Message;
 import com.mini.codec.proto.MessagePack;
+import com.mini.codec.utils.MsgPack;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Objects;
-
 /**
  * @author: zhl
- * @description: 消息编码类，私有协议规则，返回至TCP客户端，入参消息为websocket转换得来
+ * @description: 消息编码类，私有协议规则，返回至TCP服务端，入参消息为websocket转换得来
  **/
 @Slf4j
 public class MessageEncoder extends MessageToByteEncoder<Message> {
@@ -24,14 +23,14 @@ public class MessageEncoder extends MessageToByteEncoder<Message> {
 
         byte[] bytes = serializeMessage(msg.getMessagePack());
 
-        // 处理有效载荷
-        byte[] bytes1 = padPayloadToFixedLength(bytes);
+//        // 处理有效载荷
+//        byte[] bytes1 = padPayloadToFixedLength(bytes);
+//
+//        if (Objects.isNull(bytes1)) {
+//            return;
+//        }
 
-        if (Objects.isNull(bytes1)) {
-            return;
-        }
-
-        out.writeBytes(bytes1);
+        out.writeBytes(bytes);
     }
 
     /**
@@ -74,29 +73,8 @@ public class MessageEncoder extends MessageToByteEncoder<Message> {
      * @return 固定长度的字节数组
      */
     public static byte[] serializeMessage(MessagePack msgBody) {
-        ByteBuf byteBuf = Unpooled.buffer(FIXED_MESSAGE_SIZE);
-
-        // 写入各个字段
-//        byteBuf.writeByte(msgBody.getCommand()); // 包头
-//        byteBuf.writeByte(msgBody.getDeviceNo()); // 设备编号
-//        byteBuf.writeByte(msgBody.getRunCommand()); // 运行指令
-//        byteBuf.writeByte(msgBody.getExciteType()); // 刺激类型
-//        byteBuf.writeShort(msgBody.getElectricityOut()); // 输出电流
-//
-//        // 写入保留字段，假设总是13字节
-//        byteBuf.writeBytes(msgBody.getExtra());
-//
-//        // 写入校验字段
-//        byteBuf.writeByte(msgBody.getVerify());
-
-        // 读取ByteBuf中的字节到数组
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(bytes);
-
-        // 释放ByteBuf资源
-        byteBuf.release();
-
-        return bytes;
+        String optCommand = MsgPack.handlerPack(msgBody);
+        return optCommand.getBytes();
     }
 
 

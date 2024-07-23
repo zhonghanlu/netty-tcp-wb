@@ -4,7 +4,6 @@ import com.mini.NettyProperties;
 import com.mini.codec.proto.Message;
 import com.mini.netty.server.handler.NettyTcpServerHandler;
 import com.mini.netty.utils.WebSocketHolder;
-import com.mini.netty.websocket.msgpack.MsgPack;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -30,6 +29,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
             FullHttpRequest request = (FullHttpRequest) msg;
             String clientId = extractClientIdFromRequest((FullHttpRequest) msg);
             // 重置地址
+            if (Objects.isNull(clientId)) {
+                return;
+            }
             request.setUri(NettyProperties.WEB_SOCKET_PREFIX);
             // 获取用户ID,关联channel
             // 将用户ID作为自定义属性加入到channel中，方便随时channel中获取用户ID
@@ -45,13 +47,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
         // 发送给TCP服务端，根据指令区分操作类型，
-        String optCommand = "";
-        if (Objects.nonNull(msg.getMessagePack())) {
-            optCommand = MsgPack.handlerPack(msg.getMessagePack());
-            log.info("客户端主动调用,调用码值：{}", optCommand);
-        }
-
-        NettyTcpServerHandler.sendToTcpServer(optCommand);
+        NettyTcpServerHandler.sendToTcpServer(msg.getMessagePack().getOptCommand().getClientId(), msg);
     }
 
 
@@ -85,8 +81,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Message>
     private void removeClientId(ChannelHandlerContext ctx) {
         AttributeKey<String> key = AttributeKey.valueOf(WEB_SOCKET_CLIENT_ID);
         String userId = ctx.channel().attr(key).get();
-        WebSocketHolder.getUserChannelSetMap().get(userId).remove(ctx.channel());
-        if (WebSocketHolder.getUserChannelSetMap().get(userId).isEmpty()) {
+        if (!WebSocketHolder.getUserChannelSetMap().get(userId).isEmpty()) {
             WebSocketHolder.getUserChannelSetMap().remove(userId);
         }
     }

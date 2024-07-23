@@ -2,35 +2,17 @@ package com.mini.codec.proto;
 
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
- * @author: zhl
- * @description: 消息服务发送给tcp的包体, tcp再根据改包体解析成Message发给客户端
- **/
+ * @author zhl
+ * @create 2024/7/23 9:15
+ */
 @Data
-public class MessagePack<T> implements Serializable {
-
-    ////////////////////////////////////hex请求参 无需Encoder/////////////////////////////////////////////
-
-//    /**
-//     * 操作hex
-//     * <p>
-//     * 启动命令：“BB”
-//     * 停止命令：“SS”
-//     * 暂停命令：“PS”
-//     * 取消暂停命令：“PB”
-//     * 关机命令：“ZZ”
-//     * 数据重发命令：“RR”
-//     * 允许手动命令：“HA” +“1”或“0”
-//     * 蜂鸣器打开命令：“BP”+“1”或“0”
-//     */
-//    private String optCommand;
+public class MessageDTO {
 
     /**
-     * 操作指令详情
+     * 操作编码
      */
-    private OptCommand optCommand;
+    private String command;
 
     /**
      * 刺激类型 (A:TDCS;B:TPCS;C:TACS;D:TRNS)
@@ -38,15 +20,15 @@ public class MessagePack<T> implements Serializable {
     private String exciteTypePack;
 
     /**
+     * 方向 0正 1负
+     */
+    private String direction;
+
+    /**
      *  TODO 设备编号
      * 1 字节
      */
-    private String extraPack1;
-
-    /**
-     * 方向 0正 1负 2双向
-     */
-    private String direction;
+    private String deviceNo;
 
     /**
      * 电流1
@@ -141,19 +123,7 @@ public class MessagePack<T> implements Serializable {
     /**
      * 预留
      */
-    private String extraPack2;
+    private String extraPack;
 
 
-    @Data
-    public static class OptCommand {
-        /**
-         * 操作指令
-         */
-        private String command;
-        /**
-         * 设备id
-         */
-        private String clientId;
-    }
 }
-

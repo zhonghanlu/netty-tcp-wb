@@ -2,13 +2,13 @@ package com.mini.netty.server;
 
 import com.mini.NettyProperties;
 import com.mini.codec.MessageDecoder;
+import com.mini.codec.MessageEncoder;
 import com.mini.netty.server.handler.NettyTcpServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.FixedLengthFrameDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -38,8 +38,8 @@ public class OptimizedNettyTcpServer implements ApplicationRunner {
                     protected void initChannel(Channel ch) {
                         ch.pipeline().addLast(new FixedLengthFrameDecoder(20));
                         ch.pipeline().addLast(new MessageDecoder());
-                        ch.pipeline().addLast(new StringEncoder()); // 发暂且不转码
-//                    ch.pipeline().addLast(new MessageEncoder());
+//                        ch.pipeline().addLast(new StringEncoder()); // 发暂且不转码
+                    ch.pipeline().addLast(new MessageEncoder());
                         ch.pipeline().addLast(new IdleStateHandler(40, 0, 0, TimeUnit.SECONDS));
 //                    ch.pipeline().addLast(new HeartBeatTcpServerHandler());
                         ch.pipeline().addLast(new NettyTcpServerHandler());

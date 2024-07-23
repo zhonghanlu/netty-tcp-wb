@@ -1,7 +1,7 @@
 package com.mini.netty.websocket;
 
-import com.mini.IPUtils;
 import com.mini.NettyProperties;
+import com.mini.netty.utils.IPUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
