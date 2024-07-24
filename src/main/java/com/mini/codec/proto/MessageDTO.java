@@ -20,15 +20,14 @@ public class MessageDTO {
     private String exciteTypePack;
 
     /**
+     * 预留1
+     */
+    private String extraPack1;
+
+    /**
      * 方向 0正 1负
      */
     private String direction;
-
-    /**
-     *  TODO 设备编号
-     * 1 字节
-     */
-    private String deviceNo;
 
     /**
      * 电流1
@@ -123,7 +122,7 @@ public class MessageDTO {
     /**
      * 预留
      */
-    private String extraPack;
+    private String extraPack2;
 
 
 }

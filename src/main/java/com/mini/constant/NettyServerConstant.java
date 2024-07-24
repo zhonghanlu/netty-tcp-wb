@@ -34,4 +34,23 @@ public class NettyServerConstant {
      * Tcp to send message
      */
     public static final String TCP_MESSAGE_ZERO_PADDING = "00000000000000000000";
+
+
+    ////////////////////////////////////Redis channel relation/////////////////////////////////////////////
+    /**
+     * Tcp to send message
+     */
+    public static final String CHANNEL_RELATION_COMMAND = "channel_relation_command:";
+
+    /**
+     * Tcp to send message 阻抗
+     */
+    public static final String CHANNEL_RELATION_RESISTANCE = "channel_relation_resistance:";
+
+    /**
+     * Tcp to send message 阻抗
+     */
+    public static final String CHANNEL_RELATION_RESIDUE_TIME = "channel_relation_residueTime:";
+
+
 }

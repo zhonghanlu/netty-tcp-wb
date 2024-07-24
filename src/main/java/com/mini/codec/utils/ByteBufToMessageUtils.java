@@ -35,21 +35,21 @@ public class ByteBufToMessageUtils {
     public static Message transition(ByteBuf in) {
 
         MessageHeader messageHeader = new MessageHeader();
-        messageHeader.setDeviceNo(in.readByte());
+        messageHeader.setDeviceNo(in.readUnsignedByte());
         messageHeader.setFlag(in.readByte());
         messageHeader.setHospNoH(in.readByte());
         messageHeader.setHospNoL(in.readByte());
-        messageHeader.setDeviceNoExtra(in.readByte());
+        messageHeader.setDeviceNoExtra(in.readUnsignedByte());
         messageHeader.setRunningState(in.readByte());
         messageHeader.setExciteType(in.readByte());
-        messageHeader.setElectricityH(in.readByte());
-        messageHeader.setElectricityL(in.readByte());
-        messageHeader.setResistanceH(in.readByte());
-        messageHeader.setResistanceL(in.readByte());
-        messageHeader.setBattery(in.readByte());
-        messageHeader.setSignal(in.readByte());
-        messageHeader.setResidueTimeH(in.readByte());
-        messageHeader.setResidueTimeL(in.readByte());
+        messageHeader.setElectricityH(in.readUnsignedByte());
+        messageHeader.setElectricityL(in.readUnsignedByte());
+        messageHeader.setResistanceH(in.readUnsignedByte());
+        messageHeader.setResistanceL(in.readUnsignedByte());
+        messageHeader.setBattery(in.readUnsignedByte());
+        messageHeader.setSignal(in.readUnsignedByte());
+        messageHeader.setResidueTimeH(in.readUnsignedByte());
+        messageHeader.setResidueTimeL(in.readUnsignedByte());
         messageHeader.setExtraA(in.readByte());
         messageHeader.setExtraB(in.readByte());
         messageHeader.setExtraC(in.readByte());
@@ -78,7 +78,7 @@ public class ByteBufToMessageUtils {
         // 信号强度
         messageVo.setSignal(evaluateSignal(messageHeader.getSignal()));
         // 剩余时间
-        int time = messageHeader.getResidueTimeH() * 256 + messageHeader.getResidueTimeL();
+        long time = messageHeader.getResidueTimeH() * 256 + messageHeader.getResidueTimeL();
         BigDecimal bg = new BigDecimal(time);
         BigDecimal toBg = new BigDecimal(60);
         BigDecimal divide = bg.divide(toBg, 2, RoundingMode.HALF_UP);
@@ -102,7 +102,7 @@ public class ByteBufToMessageUtils {
         return message;
     }
 
-    public static String evaluateSignal(int signal) {
+    public static String evaluateSignal(long signal) {
         if (signal >= -100 && signal < -88) {
             return "1";
         } else if (signal >= -88 && signal < -77) {

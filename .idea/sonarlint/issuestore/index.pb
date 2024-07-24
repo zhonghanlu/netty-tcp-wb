@@ -3,12 +3,8 @@
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 z
 Jsrc/main/java/com/mini/netty/websocket/handler/WebSocketServerHandler.java,c\b\cb686d0979f5eb6a42e191d4a77e7a7ff7ba3e0c
-_
-/src/main/java/com/mini/tcp/SimpleTCPServer.java,7\5\754888095caa4dd78c9ea1b171c31678c4c882d1
 v
 Fsrc/main/java/com/mini/netty/websocket/WebSocketServerInitializer.java,5\7\57ac237d04ee7d3976d1f5b46a531170e33c48a1
-`
-0src/main/java/com/mini/NettyDemoApplication.java,3\f\3f5aa6b445fe527d0fda8cb0237dbe076021e160
 q
 Asrc/main/java/com/mini/netty/websocket/WebSocketServerConfig.java,6\d\6d539f3d53f081c5998dfc6ba29518088aa3fb3d
 _
@@ -44,8 +40,6 @@ g
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 h
 8src/main/java/com/mini/constant/NettyServerConstant.java,a\0\a0d057676407fb18587d5905f9878041fd5dc84d
-S
-#src/main/java/com/mini/IPUtils.java,5\e\5e99e0fa2e8306c7c3584829374459be38518865
 [
 +src/main/java/com/mini/NettyProperties.java,0\c\0c7ab6bb45eec52eae6732f2f696feef377ed9e2
 a
@@ -54,8 +48,6 @@ a
 1src/main/java/com/mini/codec/enums/RunOrStop.java,3\8\38dea94c0238e36a019db32cbd0ccc8d59c44edb
 b
 2src/main/java/com/mini/codec/enums/ExciteType.java,c\8\c8ffec76bc60760fa4b6fe0dfc5c1cd69aa37cd7
-k
-;src/main/java/com/mini/netty/websocket/msgpack/MsgPack.java,f\5\f50e4b0961ff76e6302c788ad068d3da210d77bf
 z
 Jsrc/main/java/com/mini/netty/server/handler/HeartBeatTcpClientHandler.java,0\f\0f79b603f380000e90c1e50c0011e0978758850d
 v
@@ -72,3 +64,5 @@ _
 /src/main/java/com/mini/codec/utils/MsgPack.java,6\9\695ee81fbd1e83c5b46a8575fc9563bfeb2edde8
 _
 /src/main/java/com/mini/netty/utils/IPUtils.java,2\c\2c0ed0c0b25cf1fd5d4b5d147db72e669c4edc70
+b
+2src/main/java/com/mini/netty/utils/RedisUtils.java,a\4\a4975a7630cf2d409eb2c5329b009c9cce5b3ae8

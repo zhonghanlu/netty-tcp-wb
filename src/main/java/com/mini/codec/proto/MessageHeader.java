@@ -12,7 +12,7 @@ public class MessageHeader {
      * 设备编号
      * 1 字节
      */
-    private byte deviceNo;
+    private long deviceNo;
 
     /**
      * 0xAA
@@ -38,7 +38,7 @@ public class MessageHeader {
      * 设备编号保留
      * 1 字节
      */
-    private byte deviceNoExtra;
+    private long deviceNoExtra;
 
     /**
      * 运行
@@ -61,53 +61,53 @@ public class MessageHeader {
      * 电流 高 存在负数
      * 1 字节
      */
-    private byte electricityH;
+    private long electricityH;
 
     /**
      * 实测
      * 电流 低 存在负数
      * 1 字节
      */
-    private byte electricityL;
+    private long electricityL;
 
     /**
      * 实测
      * 阻抗 高
      * 1 字节
      */
-    private byte resistanceH;
+    private long resistanceH;
 
     /**
      * 实测
      * 阻抗 低
      * 1 字节
      */
-    private byte resistanceL;
+    private long resistanceL;
 
     /**
      * 电池
      * 电量百分比
      * 1 字节
      */
-    private byte battery;
+    private long battery;
 
     /**
      * 信号强度
      * 1 字节
      */
-    private byte signal;
+    private long signal;
 
     /**
      * 剩余时间 高
      * 1 字节
      */
-    private byte residueTimeH;
+    private long residueTimeH;
 
     /**
      * 剩余时间 低
      * 1 字节
      */
-    private byte residueTimeL;
+    private long residueTimeL;
 
     /**
      * 保留字段
