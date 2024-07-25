@@ -1,6 +1,8 @@
 package com.mini.codec.proto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -145,6 +147,8 @@ public class MessagePack<T> implements Serializable {
 
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class OptCommand {
         /**
          * 操作指令

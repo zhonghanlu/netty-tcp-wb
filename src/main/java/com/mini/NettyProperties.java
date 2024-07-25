@@ -104,6 +104,23 @@ public class NettyProperties {
         return TCP_CLIENT_RETRYING_INTERVAL;
     }
 
+
+    /**
+     * tcp服务端接收阻抗最大值
+     */
+    private int tcpServerResistanceReceiveMax = 100;
+
+    public static int TCP_SERVER_RESISTANCE_RECEIVE_MAX;
+
+    @PostConstruct
+    public void setTcpServerResistanceReceiveMax() {
+        TCP_SERVER_RESISTANCE_RECEIVE_MAX = this.tcpServerResistanceReceiveMax;
+    }
+
+    public int getTcpServerResistanceReceiveMax() {
+        return TCP_SERVER_RESISTANCE_RECEIVE_MAX;
+    }
+
     // =====================分割线======================
 
 

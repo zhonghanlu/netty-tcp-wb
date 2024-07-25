@@ -48,9 +48,20 @@ public class NettyServerConstant {
     public static final String CHANNEL_RELATION_RESISTANCE = "channel_relation_resistance:";
 
     /**
-     * Tcp to send message 阻抗
+     * Tcp to send 时效时间
      */
     public static final String CHANNEL_RELATION_RESIDUE_TIME = "channel_relation_residueTime:";
 
+    /**
+     * Tcp 全局阻抗信息
+     */
+    public static final String CHANNEL_ALL_RESISTANCE = "channel_all_resistance:";
 
+
+
+
+    /**
+     * 训练端Id
+     */
+    public static final String WEB_SOCKET_SCALE_ID = "code";
 }
