@@ -18,9 +18,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static com.mini.constant.NettyServerConstant.TCP_SOCKET_CLIENT_ID;
-
 
 @Slf4j
 @Component
@@ -46,6 +46,21 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
         log.info("连接TCP服务端成功");
     }
 
+    /**
+     * 接收硬件对接消息：
+     * 1.正常接收数据处理
+     * 2.服务端主动发送消息，客户端回执ack消息处理
+     * 3.设计
+     *      3.1.操作命令缓存
+     *      3.2.机器稳定倒计时缓存，销毁时间，无需主动清除
+     *      3.3.任务时效缓存
+     *      3.4.任务最大电阻缓存
+     * 4.接收启动命令，处理操作命令缓存，以及机器稳定倒计时缓存
+     * 5.接收到暂停命令，处理机器倒计时缓存续期
+     * 6.启动命令，以及操作命令存在，并且倒计时缓存不存在时记录时效时间以及实时电阻
+     * 6.1.达到预定阙值时进行暂停命令，再次进入进行倒计时缓存续期
+     * 7.接收到停止命令，进行时效时间统计以及最大阻抗统计，调用db操作，清空缓存，代表此通道的此任务结束
+     */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
         // 剔除ack指令，暂且不需要此指令
@@ -55,57 +70,65 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
             && 0 == messageHeader.getBattery()
             && 0 == messageHeader.getSignal()
             && 0 == messageHeader.getVerify()) {
-            log.info("客户端操作，回执消息");
+            log.info("客户端操作，回执消息，无需处理逻辑");
             return;
         }
 
         // 通过解码器，将byteBuf字节数据转换为实体， 回执给websocket，响应给前端
-        WebSocketServerHandler.sendToWebSocket(String.valueOf(msg.getMessageHeader().getDeviceNo()), msg);
+        WebSocketServerHandler.sendToWebSocket(String.valueOf(messageHeader.getDeviceNo()), msg);
 
-        MessageVo messageVo1 = msg.getMessageVo();
-        String deviceNo = messageVo1.getDeviceNo();
+        MessageVo messageVo = msg.getMessageVo();
+        String deviceNo = messageVo.getDeviceNo();
         String channelId = ctx.channel().id().asLongText();
         String runStatus = String.valueOf(msg.getMessageHeader().getRunningState());
+
         // channel 缓存状态key
         String channelCommandKey = NettyServerConstant.CHANNEL_RELATION_COMMAND + channelId;
+        // 机器启动稳定倒计时
+        String countDownKey = NettyServerConstant.CHANNEL_RESISTANCE_COUNT_DOWN + channelId;
+
+        // 15秒已过，稳定进行记录
+        Object countDown = RedisUtils.getCacheObject(countDownKey);
         // 检测当前channel对的机器是否进行启动
         String command = RedisUtils.getCacheObject(channelCommandKey);
 
         // 检测表示flag
         boolean flag = StringUtils.isNotEmpty(command) && command.equals(Command.BB.getStringValue());
 
-        // 机器实时阻抗信息
-        String realResistanceKey = NettyServerConstant.CHANNEL_ALL_RESISTANCE + channelId;
-        RedisUtils.setCacheObject(realResistanceKey, messageVo1.getResistance());
-
         // 启动,键入启动缓存操作
         if (RunOrStop.RUN.getIntValue().equals(runStatus) && StringUtils.isEmpty(command)) {
-            String redisKey = NettyServerConstant.CHANNEL_RELATION_COMMAND + channelId;
-            RedisUtils.setCacheObject(redisKey, Command.BB.getStringValue());
+            // 存入启动缓存指令
+            RedisUtils.setCacheObject(channelCommandKey, Command.BB.getStringValue());
             log.info("当前ChannelId为:{},执行{}操作", channelId, Command.BB.getStringValue());
+
+            // 设置一个15秒阻抗稳定时长
+            RedisUtils.setCacheObject(countDownKey, channelId, NettyServerConstant.CHANNEL_RESISTANCE_COUNT_DOWN_EXPIRE, TimeUnit.SECONDS);
+        }
+
+        // 暂停，持续为countDownKey进行续期
+        if (RunOrStop.SUSPENDED.getIntValue().equals(runStatus)) {
+            // 设置一个15秒阻抗稳定时长
+            RedisUtils.setCacheObject(countDownKey, channelId, NettyServerConstant.CHANNEL_RESISTANCE_COUNT_DOWN_EXPIRE, TimeUnit.SECONDS);
         }
 
         // 已启动且缓存中有启动信息，将此次实时信息存入
-        if (RunOrStop.RUN.getIntValue().equals(runStatus) && flag) {
-            MessageVo messageVo = msg.getMessageVo();
-            if (Objects.nonNull(messageVo)) {
-                // 电阻 根据ZSet存储
-                String resistance = messageVo.getResistance();
-                String resistanceKey = NettyServerConstant.CHANNEL_RELATION_RESISTANCE + channelId;
-                RedisUtils.setZSetObject(resistanceKey, messageVo, Double.parseDouble(resistance));
-                // 所用耗时 根据ZSet
-                String resistanceTimeKey = NettyServerConstant.CHANNEL_RELATION_RESIDUE_TIME + channelId;
-                RedisUtils.setZSetObject(resistanceTimeKey, messageVo, Double.parseDouble(messageVo.getResidueTime()));
+        if (RunOrStop.RUN.getIntValue().equals(runStatus) && Objects.isNull(countDown) && flag) {
+            // 电阻 根据ZSet存储
+            String resistance = messageVo.getResistance();
+            String resistanceKey = NettyServerConstant.CHANNEL_RELATION_RESISTANCE + channelId;
+            RedisUtils.setZSetObject(resistanceKey, messageVo, Double.parseDouble(resistance));
+            // 所用耗时 根据ZSet
+            String resistanceTimeKey = NettyServerConstant.CHANNEL_RELATION_RESIDUE_TIME + channelId;
+            RedisUtils.setZSetObject(resistanceTimeKey, messageVo, Double.parseDouble(messageVo.getResidueTime()));
 
-                // 获取当前阻抗，进行处理，大于阙值，进行暂停操作
-                if (Math.round(Float.parseFloat(resistance)) > NettyProperties.TCP_SERVER_RESISTANCE_RECEIVE_MAX) {
-                    // 暂停
-                    Message message = new Message();
-                    MessagePack<Object> pack = new MessagePack<>();
-                    pack.setOptCommand(new MessagePack.OptCommand(Command.PS.getStringValue(), deviceNo));
-                    message.setMessagePack(pack);
-                    sendToTcpServer(deviceNo, message);
-                }
+            // 获取当前阻抗，进行处理，大于阙值，进行暂停操作
+            if (Math.round(Float.parseFloat(resistance)) > NettyProperties.TCP_SERVER_RESISTANCE_RECEIVE_MAX) {
+                // 暂停
+                Message message = new Message();
+                MessagePack<Object> pack = new MessagePack<>();
+                pack.setOptCommand(new MessagePack.OptCommand(Command.PS.getStringValue(), deviceNo));
+                message.setMessagePack(pack);
+                sendToTcpServer(deviceNo, message);
             }
         }
 
@@ -113,22 +136,23 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
         if (RunOrStop.STOP.getIntValue().equals(runStatus) && flag) {
             String resistanceKey = NettyServerConstant.CHANNEL_RELATION_RESISTANCE + channelId;
             // 最大阻抗
-            Double resistanceLargest = RedisUtils.getZSetLastScore(resistanceKey);
+            double resistanceLargest = RedisUtils.getZSetLastScore(resistanceKey);
 
             // 使用时长
             String resistanceTimeKey = NettyServerConstant.CHANNEL_RELATION_RESIDUE_TIME + channelId;
-            Double resistanceTimeLargest = RedisUtils.getZSetLastScore(resistanceTimeKey);
-            Double resistanceTimeMini = RedisUtils.getZSetFirstScore(resistanceTimeKey);
+
+            double resistanceTimeLargest = RedisUtils.getZSetLastScore(resistanceTimeKey);
+            double resistanceTimeMini = RedisUtils.getZSetFirstScore(resistanceTimeKey);
             double resistanceTime = resistanceTimeLargest - resistanceTimeMini;
+
             // 处理业务操作
             log.info("执行时间：{},最大电阻：{}", resistanceTime, resistanceLargest);
-//            SpecialSubmissionsResult.submitStimulation(deviceNo, Math.round(resistanceTime), resistanceLargest.toString());
+//            new SpecialSubmissionsResult().submitStimulation(deviceNo, Math.round(resistanceTime), String.valueOf(resistanceLargest));
 
             // 删除此channel的所有缓存信息
             RedisUtils.deleteObject(resistanceKey);  // 启动之后阻抗信息
             RedisUtils.deleteObject(resistanceTimeKey); // 启动之后时效时间信息
             RedisUtils.deleteObject(channelCommandKey); // 启动操作启动信息
-            RedisUtils.deleteObject(realResistanceKey); // 全局实时阻抗缓存
         }
     }
 
@@ -145,13 +169,10 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
         String resistanceKey = NettyServerConstant.CHANNEL_RELATION_RESISTANCE + channelId;
         // 使用时长
         String resistanceTimeKey = NettyServerConstant.CHANNEL_RELATION_RESIDUE_TIME + channelId;
-        // 实时阻抗信息
-        String realResistanceKey = NettyServerConstant.CHANNEL_ALL_RESISTANCE + channelId;
         // 删除此channel的所有缓存信息
         RedisUtils.deleteObject(resistanceKey);
         RedisUtils.deleteObject(resistanceTimeKey);
         RedisUtils.deleteObject(channelCommandKey);
-        RedisUtils.deleteObject(realResistanceKey);
     }
 
     @Override
@@ -194,13 +215,6 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
             return "当前clientId，没有查询到对应channel";
         }
 
-        // 检测当前阻抗是否大于阙值
-        String checkMsg = checkRealResistance(channel.id().asLongText(), data);
-
-        if (Objects.nonNull(checkMsg)) {
-            return checkMsg;
-        }
-
         ChannelFuture future = channel.writeAndFlush(data);
         future.addListener((ChannelFutureListener) future1 -> {
             if (!future1.isSuccess()) {
@@ -219,9 +233,9 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
         String command = data.getMessagePack().getOptCommand().getCommand();
         String realResistanceKey = NettyServerConstant.CHANNEL_ALL_RESISTANCE + channelId;
         if (Command.BB.getStringValue().equals(command)) {
-            int realResistance = RedisUtils.getCacheObject(realResistanceKey);
+            String realResistance = RedisUtils.getCacheObject(realResistanceKey);
 
-            if (realResistance > NettyProperties.TCP_SERVER_RESISTANCE_RECEIVE_MAX) {
+            if (Math.round(Float.parseFloat(realResistance)) > NettyProperties.TCP_SERVER_RESISTANCE_RECEIVE_MAX) {
                 return "当前机器阻抗大于最高阻抗，不允许启动，请稍后重试";
             }
         }
