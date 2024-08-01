@@ -14,6 +14,8 @@ public class Message {
 
     private MessageVo messageVo;
 
+    private MessageScale messageScale;
+
     @Override
     public String toString() {
         return "Message{" +

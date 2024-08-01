@@ -63,13 +63,14 @@ public class NettyServerConstant {
     public static final String CHANNEL_RESISTANCE_COUNT_DOWN = "channel_resistance_count_down:";
 
     /**
+     * 机器结束倒计时
+     */
+    public static final String CHANNEL_RESISTANCE_COUNT_DOWN_END = "channel_resistance_count_down_end:";
+
+    /**
      * 过期时间
      */
     public static final int CHANNEL_RESISTANCE_COUNT_DOWN_EXPIRE = 15;
-
-
-
-
 
 
     /**

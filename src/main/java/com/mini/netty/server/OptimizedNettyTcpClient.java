@@ -1,9 +1,9 @@
-package com.mini.netty.server;//package com.ruoyi.netty.server;//package com.mini.netty.client;
+//package com.mini.netty.server;//package com.ruoyi.netty.server;//package com.mini.netty.client;
 //
-//import com.ruoyi.NettyProperties;
-//import com.ruoyi.codec.MessageDecoder;
-//import com.ruoyi.codec.MessageEncoder;
-//import com.ruoyi.netty.server.handler.HeartBeatTcpClientHandler;
+//import com.mini.NettyProperties;
+//import com.mini.codec.MessageDecoder;
+//import com.mini.codec.MessageEncoder;
+//import com.mini.netty.server.handler.HeartBeatTcpClientHandler;
 //import io.netty.bootstrap.Bootstrap;
 //import io.netty.channel.*;
 //import io.netty.channel.nio.NioEventLoopGroup;
@@ -12,7 +12,6 @@ package com.mini.netty.server;//package com.ruoyi.netty.server;//package com.min
 //import io.netty.handler.timeout.IdleStateHandler;
 //import io.netty.util.concurrent.DefaultEventExecutor;
 //import lombok.extern.slf4j.Slf4j;
-//import org.springframework.stereotype.Component;
 //
 //import javax.annotation.PreDestroy;
 //import java.util.concurrent.TimeUnit;
