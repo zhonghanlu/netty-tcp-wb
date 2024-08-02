@@ -26,7 +26,7 @@ import static com.mini.constant.NettyServerConstant.TCP_SOCKET_CLIENT_ID;
 
 @Slf4j
 @Component
-public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> {
+public class NettyTcpServerHandler2 extends SimpleChannelInboundHandler<Message> {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -49,7 +49,7 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
     }
 
     /**
-     * 硬件只有前后15s淡入淡出，暂停再启动不做时间累加，淡入淡出阻抗为0
+     * 硬件只有前后15s
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
@@ -84,7 +84,7 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
         String command = RedisUtils.getCacheObject(channelCommandKey);
 
         // 检测表示flag
-        boolean flag = org.apache.commons.lang3.StringUtils.isNotEmpty(command) && command.equals(Command.BB.getStringValue());
+        boolean flag = StringUtils.isNotEmpty(command) && command.equals(Command.BB.getStringValue());
 
         // 启动,键入启动缓存操作
         if (RunOrStop.RUN.getIntValue().equals(runStatus) && StringUtils.isEmpty(command)) {
@@ -96,11 +96,11 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
             RedisUtils.setCacheObject(countDownKey, channelId, CHANNEL_RESISTANCE_COUNT_DOWN_EXPIRE, TimeUnit.SECONDS);
         }
 
-        // 暂停，持续为countDownKey进行续期
-        if (RunOrStop.SUSPENDED.getIntValue().equals(runStatus)) {
-            // 设置一个15秒阻抗稳定时长
-            RedisUtils.setCacheObject(countDownKey, channelId, CHANNEL_RESISTANCE_COUNT_DOWN_EXPIRE, TimeUnit.SECONDS);
-        }
+//        // 暂停，持续为countDownKey进行续期
+//        if (RunOrStop.SUSPENDED.getIntValue().equals(runStatus)) {
+//            // 设置一个15秒阻抗稳定时长
+//            RedisUtils.setCacheObject(countDownKey, channelId, CHANNEL_RESISTANCE_COUNT_DOWN_EXPIRE, TimeUnit.SECONDS);
+//        }
 
         // 已启动且缓存中有启动信息，将此次实时信息存入
         if (RunOrStop.RUN.getIntValue().equals(runStatus) && Objects.isNull(countDown) && flag) {
