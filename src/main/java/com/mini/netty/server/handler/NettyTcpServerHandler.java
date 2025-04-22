@@ -49,7 +49,20 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
     }
 
     /**
-     * 硬件只有前后15s淡入淡出，暂停再启动不做时间累加，淡入淡出阻抗为0
+     * 接收硬件对接消息：
+     * 1.判断是否是ack指令，如果是，则直接跳过，暂且不对此消息处理
+     * 2.构建缓存key
+     * 2.1.channel通道指令缓存
+     * 2.2.机器启动稳定倒计时 key 自动过期 需要进行续期
+     * --------删除-----------   2.3.机器结束稳定倒计时 key 自动过期 需要进行续期
+     * 2.4.机器使用时长 key
+     * 2.5.机器最大阻抗 key
+     * 3.根据消息结果，判断是否需要键入，过期稳定缓存keu
+     * 4.存入启动缓存指令缓存，代表此消息正在运行中，启动稳定进行创建
+     * 5.暂停续期启动或者结束缓存，例如，1分钟任务，淡入淡出30秒，在一分钟之内的，倒计时正常续期，在前后15秒内，硬件端不能超过一个区间15s，
+     * 比如 1分20秒暂停了，硬件进行续期最大只能为1分30秒，
+     * 13秒时暂停了，相当于直接结束了
+     * 6.最终计算数据，调用db，清空缓存
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) {
@@ -109,6 +122,8 @@ public class NettyTcpServerHandler extends SimpleChannelInboundHandler<Message> 
             RedisUtils.setZSetObject(resistanceKey, messageVo, Double.parseDouble(resistance));
             // 所用耗时 根据ZSet
             String residueTime = messageVo.getResidueTime();
+            // 预留淡入淡出时间 例如 第一次正式开始计时 90秒任务 前后30秒淡入淡出 75第一次 最后一次 必定为15秒
+            // 前提需要和硬件协商，后15秒淡入淡出，必定为90秒，不可超过，避免极端重复暂停，一直累加15，会造成末尾更大
             if (Math.round(Float.parseFloat(residueTime)) >= CHANNEL_RESISTANCE_COUNT_DOWN_EXPIRE) {
                 RedisUtils.setZSetObject(resistanceTimeKey, messageVo, Double.parseDouble(residueTime));
             }
